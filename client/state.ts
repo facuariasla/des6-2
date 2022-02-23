@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 
-const API_BASE_URL = "link de heroku";
+const API_BASE_URL = "https://des6-2.herokuapp.com";
 
 const state = {
 
