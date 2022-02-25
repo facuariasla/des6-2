@@ -1,4 +1,5 @@
 import * as express from "express";
+// Usar para archivos estaticos:
 import * as path from "path";
 import * as cors from "cors";
 import { rtdb, firestore } from "./database";
@@ -19,14 +20,6 @@ app.get("/testeo", (req, res) => {
   res.json({ parece: "que anda este get" });
 });
 
-
-
-// La comparacion de que la password, y la passwordConfirm sean iguales
-// Se realiza en la parte del 'front', la data que llega aca son:
-// el tagname (se revisa si ya existe en la database) y la password 
-
-//MINUTO 35 clase 5 rooms
-
 app.post("/signup", (req, res) => {
   // const tagname = req.body.tagname;
   //Es lo mismo que:
@@ -41,6 +34,7 @@ app.post("/signup", (req, res) => {
         usersCollection
           .add({ tagname: tagname, password: password })
           .then((newUserRef) => {
+            usersCollection;
             res.status(200).json({
               id: newUserRef.id,
               new: true,
@@ -56,20 +50,47 @@ app.post("/signup", (req, res) => {
     });
 });
 
+app.post("/auth", (req, res) => {
+  const { tagname } = req.body;
+  const { password } = req.body;
+
+  usersCollection
+    .where("tagname", "==", tagname)
+    .get()
+    .then((searchRes) => {
+      if (searchRes.empty) {
+        res.status(400).json({
+          message: "El usuario ingresado no existe",
+        });
+      } else {
+        searchRes.forEach((documentSnapshot) => {
+          console.log(`Found document at ${documentSnapshot.ref.path}`);
+          res.json(documentSnapshot.data().password == password);
+        });
+      }
+    });
+});
+
+// create-or ***********************************************************
 
 app.post("/rooms", (req, res) => {
   //requisito usar el userId para crear room nueva
   //recordar que cada user tiene un tagname, userId
-  const { userId } = req.body;
+  const { tagname } = req.body;
   //buscar en coll /users el doc con el userId
   usersCollection
-    .doc(userId.toString())
+    .where("tagname", "==", tagname)
     .get()
-    .then((doc) => {
-      //Si el doc existe crear una room con un id generico
-      if (doc.exists) {
+    .then((searchRes) => {
+      if (searchRes.empty) {
+        res.status(401).json({
+          message: "User no identificado en la base de datos. Error en registro o login",
+        });
+      } else {
         const roomRef = rtdb.ref("rooms/" + nanoid());
-        //setea la room con las propiedades siguientes
+        // Room las sig propiedades
+        // seteo en userOne al que CREA la sala? 
+        // y en userTwo al que intenta ingresar?
         roomRef
           .set({
             currentGame: {
@@ -88,13 +109,12 @@ app.post("/rooms", (req, res) => {
                 ready: false,
               },
             },
-            owner: userId,
+            owner: searchRes.docs[0].id,
           })
           .then(() => {
-            //Guardamos el id creado por nanoid para el room
             const roomIdNano = roomRef.key;
             const roomId = 1000 + Math.round(Math.random() * 999);
-            //roomId usado como nombre del doc de la room collection
+
             roomsColl
               .doc(roomId.toString())
               .set({
@@ -108,15 +128,17 @@ app.post("/rooms", (req, res) => {
               .then(() => {
                 res.json({
                   id: roomId.toString(),
+                  userId: searchRes.docs[0].id,
                 });
               });
           });
-      } else {
-        res.status(401).json({
-          message: "User no identificado en la base de datos",
-        });
       }
     });
+});
+
+app.get("/get-room", (req, res) => {
+  // lee la data posteada por /rooms
+  // la logica si puede ingresar a la rtdb o no, se maneja en state (?)
 });
 
 app.listen(port, () => {

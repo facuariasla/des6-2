@@ -1,7 +1,6 @@
 {
   "name": "zzz21-2-2022-back-des6",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev:api": "nodemon --watch ./server/index.ts --exec ts-node ./server/index.ts",

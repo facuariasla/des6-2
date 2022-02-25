@@ -4,13 +4,12 @@ const router = new Router(document.querySelector(".root"));
 
 router.setRoutes([
   { path: "/", component: "home-page" },
-  { path: "/create-or-getinto", component: "/create-or-getinto" },
-
-  // { path: "/enteroom", component: "enteroom-page" },
-  // { path: "/refused", component: "refused-page" },
-  // { path: "/waitingroom", component: "waiting-room" },
-  // { path: "/game", component: "game-page" },
-  // { path: "/win-page", component: "win-page" },
-  // { path: "/lose-page", component: "lose-page" },
-  // { path: "/draw-page", component: "draw-page" },
+  { path: "/signup", component: "signup-page" },
+  { path: "/login", component: "login-page" },
+  { path: "/create-or", component: "create-or" },
+  { path: "/new-game", component: "new-game" },
+  { path: "/enter-roomcode", component: "enter-roomcode" },
+  { path: "/game-rules", component: "game-rules" },
+  // { path: "/game", component: "game-play" },
+  // { path: "/result", component: "result-page" },
 ]);
