@@ -61,7 +61,8 @@ class GoRoom extends HTMLElement {
   }
 
   render() {
-   
+    // Si actualizo la pagina, etc, si no hay data de user en la sessionStorage
+    // Que me envie logearme o registrame
     const tagName = state.getState().tagname;
 
     const $homePage = document.createElement("div");
@@ -80,7 +81,7 @@ class GoRoom extends HTMLElement {
       <h1 class="title-game">Piedra, Papel o Tijeras</h1>
       <div class="form-container">
         <form action="" class="form-room">
-          <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA">
+          <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="20" mxnlength="40">
           <button class="send-code-btn" type="submit">INGRESAR A ROOM</button>
         </form>
       </div>
@@ -91,34 +92,57 @@ class GoRoom extends HTMLElement {
   }
 
   addListeners() {
-    const $logOut = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
-    const $formRoom = <HTMLInputElement>this.shadow.querySelector('.form-room');
+    const $logOut = <HTMLInputElement>this.shadow.querySelector(".logout-btn");
+    const $formRoom = <HTMLInputElement>this.shadow.querySelector(".form-room");
 
-    $logOut.addEventListener('click', () =>{
+    $logOut.addEventListener("click", () => {
       // Que use una funcion del state que borre el tagname o userId de la rtdb
       // y que me redireccione a /home
-      Router.go('/')
-      
-      // ESTE MECANISMO SE REPITE EN CASI TODAS LAS PAGINAS DE ACA EN ADELANTE
-    })
+      sessionStorage.removeItem("rps.player");
+      Router.go("/");
 
-    $formRoom.addEventListener('submit', (e) =>{
+      // ESTE MECANISMO SE REPITE EN CASI TODAS LAS PAGINAS DE ACA EN ADELANTE
+    });
+
+    $formRoom.addEventListener("submit", (e) => {
       e.preventDefault();
 
- 
-      const inputCodeVal = (<HTMLInputElement>this.shadow.querySelector('.input-code')).value;
+      const inputCodeVal = (<HTMLInputElement>(
+        this.shadow.querySelector(".input-code")
+      )).value;
+      const inputTagnameVal = sessionStorage.getItem("rps.player");
+      // const tagnameValue = state.getState().tagname;
+
+      const roomData = {
+        tagname2: inputTagnameVal,
+        rtdbLongId: inputCodeVal,
+      };
+
       // usar getIntoARoom(roomCode)
       // El State compara la data de la rtdb/db con la ingresada aqui
       // Si la clave no coincide (ya sea porque en la rtdb es null, o porque esta mal escrita, o llena), el state me devuelve un mensaje
       // que no renderize una nueva page, solo avise (alert o algo)
       //Recordar ponerle limite de caracteres al codigo
-      console.log(inputCodeVal)
+      console.log(roomData);
+
+      const getInto = state.getIntoARoom(roomData);
+      getInto.then((res) => {
+        if (res.message) {
+          return alert(res.message);
+        }
+
+        state.setTagnameTwo(res.tagname2);
+        Router.go("/game-rules");
+
+        // Mecanismo del state que trabaja con la rtdb
+        // seteando los valores del user2
+        // rooms/longId/currentGame/user2
+      });
 
       // Si la clave no coincide, el flujo se corta (usar return)
       // Si la clave coincide que el flujo continue y me mueva a la sig pag
-      // Router.go('/')
-
-    })
+      // Router.go('/game-rules')
+    });
   }
 }
 

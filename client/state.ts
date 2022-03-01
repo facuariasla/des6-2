@@ -1,4 +1,5 @@
 import { Router } from "@vaadin/router";
+import { rtdb } from "../server/database";
 
 // const API_BASE_URL = "https://des6-2.herokuapp.com";
 const API_BASE_URL = "http://localhost:3050";
@@ -9,6 +10,11 @@ const state = {
     password: null,
     userId: null,
     roomId: null,
+    rtdbLongId:null,
+
+    tagname2: null,
+    userId2: null,
+
   },
 
   //array de funciones que devuelven data
@@ -24,11 +30,6 @@ const state = {
     for(let callback of this.listeners){
       callback();
     }
-  },
-  
-   // Recibe una func y se la agrega a listeners:[]
-   subscribe(callback: (any) => any) {
-    this.listeners.push(callback);
   },
 
 
@@ -82,7 +83,6 @@ const state = {
       method:'POST',
       headers: { "content-type": "application/json"},
       body: JSON.stringify(userData),
-
     })
     .then((res)=>{
       return res.json();
@@ -98,14 +98,32 @@ const state = {
     this.setState(currentState);
   },
 
-  setUserId(userId){
+  //El userId es el mismo valor que el id del documento de la database
+  setUserId(userId: string){
     const currentState = this.getState();
     currentState.userId = userId;
     this.setState(currentState);
   },
   // page /create-or ****************************************************
 
+  setIdToShare(rtdbLongId: string){
+    const currentState = this.getState();
+    currentState.rtdbLongId = rtdbLongId;
+    this.setState(currentState);
+  },
+
   getIntoARoom(roomCode){
+    return fetch(API_BASE_URL + "/go-to-a-room", {
+      method:'POST',
+      headers: { "content-type": "application/json"},
+      body: JSON.stringify(roomCode),
+    })
+    .then((res)=>{
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
     // hacer un fetch a la API que tiene la informacion de la RTDB?
     // Si no coincide el roomCode, no ingresa. 'message'
     // Si el roomCode coincide, pero el owner no esta. 'message'
@@ -113,7 +131,25 @@ const state = {
     // El code va a parar al state
   },
 
-  
+  // tagname que se setea cuando se ingresa como INVITADO
+  setTagnameTwo(inputTagname2: string){
+    const currentState = this.getState();
+    currentState.tagname2 = inputTagname2;
+    this.setState(currentState);
+  },
+
+  waitingPlayer2(longRoomId: string){
+
+  },
+
+
+   // Recibe una func y se la agrega a listeners:[]
+   subscribe(callback: (any) => any) {
+    this.listeners.push(callback);
+  },
+
+
+
 
 
 }

@@ -56,15 +56,21 @@ class CreateOrNot extends HTMLElement {
   }
 
   render() {
-    const tagName = state.getState().tagname;
+    // Si actualizo la pagina, etc, si no hay data de user en la sessionStorage
+    // Que me envie logearme o registrame
+    // Para esto -> Debo REGISTRAR el tag en la sesion o no? 
+    // El tag o roomid en la sesion seguira estando por mas que f5
+    // Pero el resto de valores del code se toman desde el STATE (preguntar)
 
+    const tagnameValStorage = sessionStorage.getItem('rps.player')
+    // const roomValueStore = sessionStorage.getItem('rps.roomCpde')
     const $homePage = document.createElement("div");
     $homePage.setAttribute("class", "container-page");
 
     $homePage.innerHTML = `
     <div class="data-top">
       <a href="" class="logout-btn">logout</a>
-      <p class="tagname">${tagName}</p>
+      <p class="tagname">${tagnameValStorage}</p>
       <div class="room-data">
       </div>
     </div>
@@ -87,12 +93,13 @@ class CreateOrNot extends HTMLElement {
     const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
 
     $logOutBtn.addEventListener('click', () =>{
+      sessionStorage.removeItem('rps.player');
       Router.go('/')
     })
 
     //tomo el valor de aca o de la local/sessionStorage?
     const tagnameVal = state.getState().tagname
-    
+    // const tagnameValStorage = sessionStorage.getItem('rps.player')
     const dataUser = {
       tagname: tagnameVal
     }
@@ -108,6 +115,8 @@ class CreateOrNot extends HTMLElement {
         } 
         state.setRoomId(res.id)
         state.setUserId(res.userId)
+      state.setIdToShare(res.rtdbLongId)
+        // sessionStorage.setItem('rps.roomCode', res.id)
         Router.go('/new-game');
       })
     })

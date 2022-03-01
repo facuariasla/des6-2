@@ -36,6 +36,10 @@ class Home extends HTMLElement {
 
   }
   render() {
+    if(sessionStorage.getItem('rps.player') !== null){
+      return Router.go('/create-or')
+    }
+    
     const $homePage = document.createElement("div");
     $homePage.setAttribute("class", "container");
 

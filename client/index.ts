@@ -9,11 +9,9 @@ import "./pages/new-game";
 import "./pages/enter-roomcode";
 import "./pages/game-rules";
 
-// import "./pages/waitingroom";
 // import "./pages/game";
 // import "./pages/win";
 // import "./pages/lose";
-// import "./pages/draw";
 import "./router";
 // import { state } from "./state";
 

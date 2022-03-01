@@ -1,16 +1,14 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
 
-
-class GameRules extends HTMLElement{
+class GameRules extends HTMLElement {
   shadow: ShadowRoot;
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
   }
 
-
-  conectedCallback(){
+  conectedCallback() {
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -55,15 +53,12 @@ class GameRules extends HTMLElement{
   height: 30px;
   width: 200px;
 }
-
-
-    `
-    this.shadow.appendChild($style);
-    this.addListeners();
+`;
+   this.shadow.appendChild($style);
+   this.addListeners();
   }
 
-
-  render(){
+  render() {
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
 
@@ -88,10 +83,7 @@ class GameRules extends HTMLElement{
     this.shadow.appendChild($homePage);
   }
 
-
-  addListeners(){
-
-  }
+  addListeners() {}
 }
 
-customElements.define('game-rules', GameRules);
+customElements.define("game-rules", GameRules);

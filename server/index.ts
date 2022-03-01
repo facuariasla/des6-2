@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(express.static("../dist"));
 app.use(cors());
 
+const rutaRelativa = path.resolve(__dirname, "../dist/", "index.html");
+
+
 const usersCollection = firestore.collection("users");
 const roomsColl = firestore.collection("rooms");
 
@@ -73,7 +76,8 @@ app.post("/auth", (req, res) => {
 
 // create-or ***********************************************************
 
-app.post("/rooms", (req, res) => {
+app.post("/rooms", (req, res, next) => {
+  try {
   //requisito usar el userId para crear room nueva
   //recordar que cada user tiene un tagname, userId
   const { tagname } = req.body;
@@ -87,21 +91,22 @@ app.post("/rooms", (req, res) => {
           message: "User no identificado en la base de datos. Error en registro o login",
         });
       } else {
+        // Creacion de la sala en la rtdb
         const roomRef = rtdb.ref("rooms/" + nanoid());
         // Room las sig propiedades
-        // seteo en userOne al que CREA la sala? 
-        // y en userTwo al que intenta ingresar?
+        // seteo en user1 al que CREA la sala? (igual para userId)
+        // y en userTwo al que intenta ingresar? (endpoint /go-to-a-room)
         roomRef
           .set({
             currentGame: {
-              userOne: {
-                tagname: "",
+              user1: {
+                tagname: tagname,
                 userId: "",
                 pick: "",
                 online: false,
                 ready: false,
               },
-              userTwo: {
+              user2: {
                 tagname: "",
                 userId: "",
                 pick: "",
@@ -112,6 +117,7 @@ app.post("/rooms", (req, res) => {
             owner: searchRes.docs[0].id,
           })
           .then(() => {
+            //Creacion de la sala en la database
             const roomIdNano = roomRef.key;
             const roomId = 1000 + Math.round(Math.random() * 999);
 
@@ -121,25 +127,73 @@ app.post("/rooms", (req, res) => {
                 // y dentro le ponemos el id largo
                 rtdbRoomId: roomIdNano,
                 history: {
-                  userOne: 0,
-                  userTwo: 0,
+                  //ver si pongo al creador en tagname 1 y al invitaod en 2
+                  tagname1: tagname,
+                  user1: 0,
+                  tagname2:"",
+                  user2: 0,
                 },
               })
               .then(() => {
                 res.json({
                   id: roomId.toString(),
                   userId: searchRes.docs[0].id,
+                  rtdbLongId: roomIdNano,
                 });
               });
           });
       }
     });
+ 
+  } catch (err) {
+    next(err);
+  }
+
 });
 
-app.get("/get-room", (req, res) => {
+app.post("/go-to-a-room", (req, res) => {
+
+  const { rtdbLongId } = req.body;
+  const { tagname2 } = req.body;
+
+  roomsColl
+    .where("rtdbRoomId", "==", rtdbLongId)
+    .get()
+    .then((searchRes) => {
+      if (searchRes.empty) {
+        res.status(401).json({
+          message: "El código de sala ingresado no es válido",
+        });
+      } else {
+        const roomRef = rtdb.ref("rooms/" + rtdbLongId + "/currentGame");
+        roomRef.update({
+          user2: {
+            tagname: tagname2,
+            userId: "",
+            pick: "",
+            online: true,
+            ready: false,
+          },
+        })
+        res.status(201).json({
+          tagname2: tagname2,
+          nanoCode: searchRes.docs[0].id
+        });
+      }
+
+    })
+
   // lee la data posteada por /rooms
   // la logica si puede ingresar a la rtdb o no, se maneja en state (?)
+  // Comienza a escribir en el objeto de la rtdb
+  // El solo hecho de poenr el code, le da el valor de online:true
+  // Poner RESTRICCION de que si el objeto SALA tiene una longitud de 2, no te deje ingresar r
+  //
 });
+
+
+
+
 
 app.listen(port, () => {
   console.log(`API listenting in ${port}`);
@@ -157,3 +211,11 @@ app.listen(port, () => {
 //ajustes
 //optimizar codigo: volumen, y lectura
 //chequeo paso a paso
+
+
+
+// Cualquier ruta no existente me envia a /index.html
+app.get("*", (req, res) => {
+  res.sendFile(`${rutaRelativa}`);
+});
+ 

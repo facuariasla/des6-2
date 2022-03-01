@@ -46,6 +46,10 @@ class SignUp extends HTMLElement {
 
   }
   render() {
+    if(sessionStorage.getItem('rps.player') !== null){
+      return Router.go('/create-or')
+    }
+    
     const $homePage = document.createElement("div");
     $homePage.setAttribute("class", "container");
 
@@ -92,11 +96,12 @@ class SignUp extends HTMLElement {
           alert(res.message);
           state.setTagname(dataUser.tagname);
           state.setPass(dataUser.password);
+          sessionStorage.setItem('rps.player', dataUser.tagname)
           // Una vez que el USER se creó, guardar su clave y tagname en 
           // localStorage o sessionStorage (?)
           setTimeout(()=>{
             Router.go('/create-or')
-          }, 2000)
+          }, 1500)
         } else {
           alert(res.message);
         }

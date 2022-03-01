@@ -59,16 +59,23 @@ class NewGame extends HTMLElement {
 
   render() {
 
+
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
+    const roomLongId = state.getState().rtdbLongId;
+
+    //Se trabaja con storage o con la data de state? preguntar
+    //La data de la sessionStorage persiste, la del State NO
+    const tagnameValStorage = sessionStorage.getItem('rps.player')
+    // const roomIdValStorage = sessionStorage.getItem('rps.roomCode')
 
     const $homePage = document.createElement("div");
     $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
     <div class="top-header">
-      <a href="" class="logout">logout</a>
-      <p class="tagname">${tagNameVal}</p>
+      <a href="" class="logout-btn">logout</a>
+      <p class="tagname">${tagnameValStorage}</p>
       <div class="room-data">
         <p class="room">SALA</p>
         <p class="room-value">${roomIdVal}</p>
@@ -77,7 +84,7 @@ class NewGame extends HTMLElement {
 
     <div class="container-mid">
       <p class="title">Compartí el código:</p>
-      <p class="code-value-big">${roomIdVal}</p>
+      <p class="code-value-big">${roomLongId}</p>
       <p class="text-mid">Con tu contricante</p>
       <p class="waiting">Esperando que el contricante ponga el codigo...</p>
     </div>
@@ -88,12 +95,33 @@ class NewGame extends HTMLElement {
 
   addListeners() {
     
-    
-    // Agregar una PROMESA o un ASYNC-AWAIT
+    const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
+      $logOutBtn.addEventListener('click', () =>{
+
+      sessionStorage.removeItem('rps.player')
+      Router.go("/")
+    })
+
+
+
+    // Agregar una PROMESA o un ASYNC-AWAIT (listeners[]?)
     // Cuando reciba valores de la rtdb 
     // [cuando los valores 'connected' de ambos en la rtdb, sean true]
     // me lleve a --------> /game-rules
 
+    //Escuchar de la RTDB cuando exista el valor user2
+    // y que esto me lleve a gamerules
+  
+    
+
+
+  // CODIGO ALTERNATIVO A ESCUCHAR CAMBIOS EN LA DATABASE
+  //   state.subscribe(() => {
+  //     const tagname2 = state.getState().tagname2;
+  //     if (tagname2 == true && (tagname2 != undefined || tagname2 != null)) {
+  //        Router.go("/rules");
+  //     }
+  //  });
   
   }
 }

@@ -46,6 +46,9 @@ class LogIn extends HTMLElement {
 
   }
   render() {
+    if(sessionStorage.getItem('rps.player') !== null){
+      return Router.go('/create-or')
+    }
     const $logPage = document.createElement("div");
     $logPage.setAttribute("class", "container");
 
@@ -66,6 +69,7 @@ class LogIn extends HTMLElement {
   }
 
   addListeners() {
+  
     const $formLog = this.shadow.querySelector("#formLog");
     $formLog.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -91,6 +95,8 @@ class LogIn extends HTMLElement {
           Router.go('/create-or')
           state.setTagname(dataUser.tagname);
           state.setPass(dataUser.password);
+          sessionStorage.setItem('rps.player', dataUser.tagname)
+          console.log(sessionStorage.getItem('rps.player'))
           // localStorage.setItem('dataUser', value) (?)
         } else {
           return alert('Contraseña incorrecta')
