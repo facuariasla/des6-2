@@ -11,3 +11,4 @@ const firestore = admin.firestore();
 const rtdb = admin.database();
 
 export { firestore, rtdb };
+

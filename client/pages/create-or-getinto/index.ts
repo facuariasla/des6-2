@@ -90,10 +90,31 @@ class CreateOrNot extends HTMLElement {
   addListeners() {
     const $newGameBtn = <HTMLInputElement>this.shadow.querySelector('.new-game-btn');
     const $roomCodeBtn = <HTMLInputElement>this.shadow.querySelector('.room-code-btn');
+    // const $logOutBtn = <HTMLLinkElement>this.shadow.querySelector('.logout-btn');
     const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
 
     $logOutBtn.addEventListener('click', () =>{
       sessionStorage.removeItem('rps.player');
+      state.setState({
+        // El tagname1 es el p1, y el tagname y tagname2 el p2
+        tagname1: null,
+        password: null,
+        userId: null,
+        roomId: null,
+        rtdbLongId: null,
+        ready1: false,
+        online1: false,
+        pick1: null,
+        score1: 0,
+    
+        score2: 0,
+        tagname: null,
+        tagname2: null,
+        userId2: null,
+        ready2: false,
+        online2: false,
+        pick2: null,
+      })
       Router.go('/')
     })
 
@@ -115,7 +136,8 @@ class CreateOrNot extends HTMLElement {
         } 
         state.setRoomId(res.id)
         state.setUserId(res.userId)
-      state.setIdToShare(res.rtdbLongId)
+        state.setIdToShare(res.rtdbLongId)
+        state.setOnlineValP1(true)
         // sessionStorage.setItem('rps.roomCode', res.id)
         Router.go('/new-game');
       })

@@ -10,6 +10,10 @@ router.setRoutes([
   { path: "/new-game", component: "new-game" },
   { path: "/enter-roomcode", component: "enter-roomcode" },
   { path: "/game-rules", component: "game-rules" },
-  // { path: "/game", component: "game-play" },
+  { path: "/waiting", component: "waiting-page" },
+  { path: "/game", component: "game-play" },
+  { path: "/lose", component: "lose-page" },
+  { path: "/win", component: "win-page" },
+  { path: "/tie", component: "tie-page" },
   // { path: "/result", component: "result-page" },
 ]);

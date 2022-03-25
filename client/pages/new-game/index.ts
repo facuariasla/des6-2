@@ -55,18 +55,17 @@ class NewGame extends HTMLElement {
    `;
     this.shadow.appendChild($style);
     this.addListeners();
+
   }
 
   render() {
-
-
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
     const roomLongId = state.getState().rtdbLongId;
 
     //Se trabaja con storage o con la data de state? preguntar
     //La data de la sessionStorage persiste, la del State NO
-    const tagnameValStorage = sessionStorage.getItem('rps.player')
+    const tagnameValStorage = sessionStorage.getItem("rps.player");
     // const roomIdValStorage = sessionStorage.getItem('rps.roomCode')
 
     const $homePage = document.createElement("div");
@@ -94,35 +93,53 @@ class NewGame extends HTMLElement {
   }
 
   addListeners() {
+    const $logOutBtn = <HTMLInputElement>(
+      this.shadow.querySelector(".logout-btn")
+    );
+    $logOutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("rps.player");
+      state.setState({
+        // El tagname1 es el p1, y el tagname y tagname2 el p2
+        tagname1: null,
+        password: null,
+        userId: null,
+        roomId: null,
+        rtdbLongId: null,
+        ready1: false,
+        online1: false,
+        pick1: null,
+        score1: 0,
     
-    const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
-      $logOutBtn.addEventListener('click', () =>{
+        score2: 0,
+        tagname: null,
+        tagname2: null,
+        userId2: null,
+        ready2: false,
+        online2: false,
+        pick2: null,
+      });
+      Router.go("/");
+    });
 
-      sessionStorage.removeItem('rps.player')
-      Router.go("/")
-    })
+    const rtdbLongId = state.getState().rtdbLongId;
+    const tagnameVal = state.getState().tagname;
 
-
-
-    // Agregar una PROMESA o un ASYNC-AWAIT (listeners[]?)
-    // Cuando reciba valores de la rtdb 
-    // [cuando los valores 'connected' de ambos en la rtdb, sean true]
-    // me lleve a --------> /game-rules
-
-    //Escuchar de la RTDB cuando exista el valor user2
-    // y que esto me lleve a gamerules
-  
+    console.log(rtdbLongId, tagnameVal);
     
+    // // No se si hearOnline() actua solo o no
+    // state.hearOnline();
+
+   
+
+    state.subscribe(() => {
+      const online1 = state.getState().online1;
+      const online2 = state.getState().online2;
+      if (online1 == true && online2 === true) {
+        Router.go("/game-rules");
+      }
+    });
 
 
-  // CODIGO ALTERNATIVO A ESCUCHAR CAMBIOS EN LA DATABASE
-  //   state.subscribe(() => {
-  //     const tagname2 = state.getState().tagname2;
-  //     if (tagname2 == true && (tagname2 != undefined || tagname2 != null)) {
-  //        Router.go("/rules");
-  //     }
-  //  });
-  
   }
 }
 

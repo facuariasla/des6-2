@@ -19,6 +19,14 @@ class Home extends HTMLElement {
       body{
         margin: 0;
        }
+      h1{
+        font-family: 'Special Elite', cursive;  
+        color:#009048;
+       }
+       button{
+        font-family: 'Odibee Sans', cursive;
+        font-size: 22px;
+       }
       .container{
         display: grid;
         justify-content: center;
