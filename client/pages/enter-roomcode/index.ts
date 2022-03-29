@@ -126,7 +126,7 @@ class GoRoom extends HTMLElement {
 
     <div class="form-container">
       <form action="" class="form-room">
-         <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="25" maxlength="35">
+         <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="20" maxlength="39">
          <button class="send-code-btn" type="submit">INGRESAR A ROOM</button>
       </form>
     </div>

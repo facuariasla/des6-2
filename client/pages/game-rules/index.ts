@@ -10,6 +10,7 @@ class GameRules extends HTMLElement {
   }
 
   connectedCallback() {
+    
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -173,13 +174,14 @@ class GameRules extends HTMLElement {
     // console.group(checkTagname());
 
     $playBtn.addEventListener("click", () => {
+
       const readyState = state.readyToPlay(dataSend);
       readyState.then((res)=>{
+        Router.go('/waiting')
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
         // Se podria hacer algo como agregarlo en pantalla
         // En vez de console.log()
-        Router.go('/waiting')
       })
     });
 

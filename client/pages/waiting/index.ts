@@ -55,9 +55,13 @@ class Waiting extends HTMLElement {
     }
   `;
     this.shadow.appendChild($style);
+    // DONDE PONGO EL STATE.HEARREADYCHANGES??
     this.addListeners();
+    state.hearReadyChanges();
+
   }
   render() {
+
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
 
@@ -94,7 +98,6 @@ class Waiting extends HTMLElement {
     // Funcion que espera a que ambos valores sean READY para ejecutar el GAME
     const rtdbLongId = state.getState().rtdbLongId;
     console.log(rtdbLongId)
-    state.hearReadyChanges();
 
 
     state.subscribe(() => {

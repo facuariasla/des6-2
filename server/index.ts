@@ -157,7 +157,7 @@ app.post("/rooms", (req, res, next) => {
   }
 });
 
-//Ir a room
+// Entrar como invitado
 app.post("/go-to-a-room", (req, res) => {
   const { rtdbLongId } = req.body;
   const { tagname2 } = req.body;
@@ -212,6 +212,7 @@ app.post("/go-to-a-room", (req, res) => {
   // Poner RESTRICCION de que si el objeto SALA tiene una longitud de 2, no te deje ingresar (?)
 });
 
+// Cambia valor a ready en rtdb
 app.post("/readytoplay", (req, res) => {
   const { player } = req.body;
   const { ready } = req.body;
@@ -276,6 +277,7 @@ app.post("/setting-picks", (req, res) => {
     });
 });
 
+// Agrega 1 punto al ganador en la db
 app.post("/add-points", (req, res) => {
   const { nanoCode } = req.body;
   const { player } = req.body;
@@ -320,6 +322,11 @@ app.post("/get-score", (req, res) => {
       });
     });
 });
+
+// Endpoint que me elimina la rtdb y la db asociada. Las salas son temporales
+app.post("/disconected", (req, res) =>{
+
+})
 
 app.listen(port, () => {
   console.log(`API listenting in ${port}`);

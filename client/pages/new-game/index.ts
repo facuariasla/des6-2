@@ -9,6 +9,8 @@ class NewGame extends HTMLElement {
     this.shadow = this.attachShadow({ mode: "open" });
   }
   connectedCallback() {
+    state.hearOnline();
+
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -65,15 +67,16 @@ class NewGame extends HTMLElement {
       justify-items: center;
       align-items: center;
       place-content: center;
-      grid-template-rows: 60px 60px 60px 60px;
+      grid-template-rows: 60px 120px 60px 60px;
     
     }
     .codeval-container .code-title{
       font-size: 32px;
     }
     .code-value-big{
-      font-size: 52px;
+      font-size: 44px;
       color: rgb(53, 197, 149);
+      text-align: center;
     }
    `;
     this.shadow.appendChild($style);
@@ -151,8 +154,6 @@ class NewGame extends HTMLElement {
     
     // // No se si hearOnline() actua solo o no
     // state.hearOnline();
-
-   
 
     state.subscribe(() => {
       const online1 = state.getState().online1;
