@@ -130,6 +130,7 @@ const state = {
       })
       .then((data) => {
         return data;
+        this.hearOnline()
       });
     // hacer un fetch a la API que tiene la informacion de la RTDB?
     // Si no coincide el roomCode, no ingresa. 'message'

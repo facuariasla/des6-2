@@ -1,5 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
+const background = require("url:../../assets/fondo.svg");
 
 class NewGame extends HTMLElement {
   shadow: ShadowRoot;
@@ -15,42 +16,64 @@ class NewGame extends HTMLElement {
     *{
       box-sizing: border-box;
     }
-    
-    body, p, a {
+    body{
       margin: 0;
     }
-    .top-header{
+    p, a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+    .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 8vh 50vh;
+      display: grid;
+      background-image: url(${background});
+    }
+    /* //////////////////////////////////// */
+    .header{
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      margin: 5px;
+      align-items: center;
+      font-size: 16px;
     }
-    .top-header .tagname{
-      justify-self: center;
-      font-weight: 600;
+
+    .header .logout-btn{
+      margin-left: 5px;
+      text-decoration: none;
+      color: red;
+    }
+    .header .tagname{
+      display: grid;
+      justify-items: center;
+      font-size: 22px;
       color: orange;
     }
-    .top-header .room-data{
+
+    .header .room-data{
+      display: grid;
       justify-self: flex-end;
+      margin-right: 5px;
+      font-size: 18px;
     }
-    /* --------------------------------------------------- */
-    .container-mid{
+    /* ////////////////// */
+    
+    .codeval-container{
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
       justify-items: center;
       align-items: center;
-      gap: 10px;
-      margin-top: 50px;
+      place-content: center;
+      grid-template-rows: 60px 60px 60px 60px;
+    
     }
-    .container-mid p {
-      font-size: 26px;
+    .codeval-container .code-title{
+      font-size: 32px;
     }
     .code-value-big{
-      font-weight: 600;
-      color: green;
-    }
-    .container-mid .waiting{
-      font-size: 16px;
+      font-size: 52px;
+      color: rgb(53, 197, 149);
     }
    `;
     this.shadow.appendChild($style);
@@ -72,19 +95,19 @@ class NewGame extends HTMLElement {
     $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
-    <div class="top-header">
+    <header class="header">
       <a href="" class="logout-btn">logout</a>
       <p class="tagname">${tagnameValStorage}</p>
       <div class="room-data">
         <p class="room">SALA</p>
         <p class="room-value">${roomIdVal}</p>
       </div>
-    </div>
-
-    <div class="container-mid">
-      <p class="title">Compartí el código:</p>
+    </header>
+  
+    <div class="codeval-container">
+      <p class="code-title">Compartí el código:</p>
       <p class="code-value-big">${roomLongId}</p>
-      <p class="text-mid">Con tu contricante</p>
+      <p class="code-title">Con tu contricante</p>
       <p class="waiting">Esperando que el contricante ponga el codigo...</p>
     </div>
   `;

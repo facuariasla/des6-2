@@ -1,5 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
+const background = require("url:../../assets/fondo.svg");
 
 
 class SignUp extends HTMLElement {
@@ -16,30 +17,80 @@ class SignUp extends HTMLElement {
     *{
       box-sizing: border-box;
     }
-    
     body{
       margin: 0;
     }
-    .container .title-game{
+    p, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px
+    }
+    .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 50vh 40vh;
+      display: grid;
+      background-image: url(${background});
+    }
+    .title-container{
+      display: grid;
+      text-align: center;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
+    }
+    .title-container .title{
+      font-family: 'Special Elite', cursive;  
+      margin: 0;
+      width: 75vw;
+      font-size: 70px;
+      color: #009048;
+    }
+    /* /////////////////////////////////////////////// */
+    .form-login{
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      justify-items: center;
+      align-items: center;
+      gap: 5px;
+    }
+    .form-login button{
+      height: 60px;
+      width: 250px;
+      font-size: 32px;
+      background-color:#006CFC ;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      color: #fff
+    }
+    
+    .form-login button:active {
+      box-shadow: 7px 6px 15px 1px rgba(0, 0, 0, 0.24);
+      transform: translateY(4px);
+      background-color: #368af8;
+    }
+    .form-login input{
+      height: 60px;
+      width: 250px;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      font-size: 28px;
       text-align: center;
     }
-    
-    .container{
+    @media (min-width: 768px){
+      .form-login button, .form-login input{
+        width: 400px;
+      }
+    }
+    /* /////////////////////////////////////////// */
+    .figs-container{
       display: grid;
-      justify-content: center;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 1fr;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
     }
-    
-    .form-home{
-      display: grid;
-      grid-template-columns: 400px;
-    
-      gap: 10px;
-    }
-    
-    .form-home input, button {
-      height: 40px;
-    }
-  
   `;
     this.shadow.appendChild($style);
     this.addListeners();
@@ -54,19 +105,22 @@ class SignUp extends HTMLElement {
     $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
-      <h1 class="title-game">Piedra, Papel o Tijeras</h1>
-      <div class="form-container">
-        <form action="" class="form-home" id="formHome" autocomplete="off">
-          <input required type="text" class="input-tagname" maxlength="20" placeholder="TAGNAME" autofocus >
+    <div class="title-container">
+      <h1 class="title">Piedra, Papel o Tijeras</h1>
+    </div>
+    
+    <div class="form-container">
+      <form action="" class="form-login" id="formHome" autocomplete="off">
+        <input required type="text" class="input-tagname" maxlength="20" placeholder="TAGNAME" autofocus >
 
-          <input required type="password" class="input-pass" maxlength="20" placeholder="PASSWORD" >
+        <input required type="password" class="input-pass" maxlength="20" placeholder="PASSWORD" >
 
-          <input required type="password" class="input-passConfirm" maxlength="20" placeholder="REPEAT PASSWORD" >
+        <input required type="password" class="input-passConfirm" maxlength="20" placeholder="REPETIR PASSWORD" >
 
-          <button class="sent-home-data" type="submit">ENVIAR</button>
-        </form>
-      </div>
-  `;
+        <button class="sent-home-data" type="submit">Enviar</button>
+      </form>
+    </div>
+    `;
 
     this.shadow.appendChild($homePage);
   }

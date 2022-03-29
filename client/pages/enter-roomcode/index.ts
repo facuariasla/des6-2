@@ -1,5 +1,7 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
+const background = require("url:../../assets/fondo.svg");
+
 
 class GoRoom extends HTMLElement {
   shadow: ShadowRoot;
@@ -18,43 +20,85 @@ class GoRoom extends HTMLElement {
     body{
       margin: 0;
     }
-
-    .data-top{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr;
-      justify-content: space-evenly;
-      align-items: center;
+    p,a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
+      margin:0;
     }
-    
-    .data-top .logout-btn {
-      margin-left: 5px;
-    }
-    .data-top .tagname {
-      margin: 0;
-      align-self: center;
-      justify-self: center;
-      color: orange;
-      font-weight: 700;
-    }
-  
     .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 8vh 50vh 30vh;
       display: grid;
-      justify-content: center;
+      background-image: url(${background});
     }
-    
-    .form-container input, button {
-      height: 40px;
-      width: 220px;
+    /* //////////////////////// */
+    .header{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      font-size: 16px;
+    }
+    .header .logout-btn{
+      margin-left: 5px;
+      text-decoration: none;
+      color: red;
+    }
+    .header .tagname{
+      display: grid;
+      justify-items: center;
+      font-size: 22px;
+      color: orange;
+    }
+    /* //////////////////////// */
+    .title-container{
+      display: grid;
       text-align: center;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
     }
-    
+    .title-container .title{
+      font-family: 'Special Elite', cursive;  
+      margin: 0;
+      width: 75vw;
+      font-size: 70px;
+      color: #009048;
+    }
+    /* /////////////////////////////////////////////// */
     .form-room{
       display: grid;
+      justify-items: center;
+      align-items: center;
       gap: 10px;
-      justify-content: center;
     }
-
+    .form-room button{
+      height: 65px;
+      width: 250px;
+      font-size: 28px;
+      background-color:#006CFC ;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      color: #fff
+    }
+    .form-room button:active {
+      box-shadow: 7px 6px 15px 1px rgba(0, 0, 0, 0.24);
+      transform: translateY(4px);
+      background-color: #368af8;
+    }
+    .form-room input{
+      height: 65px;
+      width: 250px;
+      font-size: 24px;
+      border: 6px #001997 solid;
+      border-radius: 6px;
+      text-align: center;
+    }
+    @media (min-width: 768px){
+      .form-room button, .form-room input{
+        width: 400px;
+      }
+    }
    `;
     this.shadow.appendChild($style);
     this.addListeners();
@@ -66,27 +110,27 @@ class GoRoom extends HTMLElement {
     const tagName = state.getState().tagname;
 
     const $homePage = document.createElement("div");
-    $homePage.setAttribute("class", "container-page");
+    $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
-
-    <div class="data-top">
+    <header class="header">
       <a href="" class="logout-btn">logout</a>
       <p class="tagname">${tagName}</p>
       <div class="room-data">
       </div>
+    </header>
+
+    <div class="title-container">
+      <h1 class="title">Piedra, Papel o Tijeras</h1>
     </div>
 
-    <div class="container">
-      <h1 class="title-game">Piedra, Papel o Tijeras</h1>
-      <div class="form-container">
-        <form action="" class="form-room">
-          <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="20" mnaxlength="40">
-          <button class="send-code-btn" type="submit">INGRESAR A ROOM</button>
-        </form>
-      </div>
+    <div class="form-container">
+      <form action="" class="form-room">
+         <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="25" maxlength="35">
+         <button class="send-code-btn" type="submit">INGRESAR A ROOM</button>
+      </form>
     </div>
-  `;
+    `;
 
     this.shadow.appendChild($homePage);
   }

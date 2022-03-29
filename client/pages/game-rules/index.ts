@@ -1,5 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
+const background = require("url:../../assets/fondo.svg");
 
 class GameRules extends HTMLElement {
   shadow: ShadowRoot;
@@ -16,43 +17,73 @@ class GameRules extends HTMLElement {
     *{
       box-sizing: border-box;
     }
-    
-    body, p, a {
+    body{
+      margin: 0;
+    }
+    p, a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
       margin: 0;
     }
     
-    .top-header{
+    .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 8vh 60vh;
+      display: grid;
+      background-image: url(${background});
+    }
+    /* //////////////////////////////////// */
+    .header{
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      margin: 5px;
+      align-items: center;
+      font-size: 16px;
     }
-    
-    
-      .top-header .tagname{
-        justify-self: center;
-      }
-
-      .top-header .room-data{
-        justify-self: flex-end;
-      }
-    /* --------------------------------------------------- */
-
+    .header .logout-btn{
+      margin-left: 5px;
+      text-decoration: none;
+      color: red;
+    }
+    .header .tagname{
+      display: grid;
+      justify-items: center;
+      font-size: 22px;
+      color: orange;
+    }
+    .header .room-data{
+      display: grid;
+      justify-self: flex-end;
+      margin-right: 5px;
+      font-size: 18px;
+    }
+    /* ////////////////// */
     .container-mid{
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-rows: 40vh 20vh;
       justify-items: center;
       align-items: center;
-      gap: 10px;
+      place-content: center;
     }
-
-    .container-mid p {
-      font-size: 22px;
+    .container-mid p{
+      font-size: 42px;
       text-align: center;
+      width: 70vw;
     }
     .container-mid button{
-      height: 30px;
-      width: 200px;
+      height: 65px;
+      width: 250px;
+      font-size: 32px;
+      background-color:#006CFC ;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      color: #fff
+    }
+    .container-mid button:active {
+      box-shadow: 7px 6px 15px 1px rgba(0, 0, 0, 0.24);
+      transform: translateY(4px);
+      background-color: #368af8;
     }
     `;
     this.shadow.appendChild($style);
@@ -67,19 +98,20 @@ class GameRules extends HTMLElement {
     $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
-    <div class="top-header">
+    <header class="header">
       <a href="" class="logout-btn">logout</a>
       <p class="tagname">${tagNameVal}</p>
       <div class="room-data">
-        <p class="room">SALA</p>
+        <p class="room">SALA:</p>
         <p class="room-value">${roomIdVal}</p>
       </div>
-    </div>
-
+    </header>
+  
     <div class="container-mid">
       <p class="rules-text">Presiona jugar y elegí: piedra, papel o tijeras antes de que pasen los 3 segundos</p>
       <button class="play-game">Jugar!</button>
     </div>
+
     `;
     this.shadow.appendChild($homePage);
   }

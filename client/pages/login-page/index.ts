@@ -1,5 +1,9 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
+const rock = require("url:../../assets/fig-rock.svg");
+const paper = require("url:../../assets/fig-note.svg");
+const scissors = require("url:../../assets/fig-scissors.svg");
+const background = require("url:../../assets/fondo.svg");
 
 
 class LogIn extends HTMLElement {
@@ -13,6 +17,7 @@ class LogIn extends HTMLElement {
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
     $style.innerHTML = `
+
     *{
       box-sizing: border-box;
     }
@@ -20,26 +25,82 @@ class LogIn extends HTMLElement {
     body{
       margin: 0;
     }
-    .container .title-game{
-      text-align: center;
+
+    p, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px
     }
     
     .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 43vh 32vh 25vh;
       display: grid;
-      justify-content: center;
+      background-image: url(${background});
     }
+    .title-container{
+      display: grid;
+      text-align: center;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
     
+    }
+    .title-container .title{
+      font-family: 'Special Elite', cursive;  
+      margin: 0;
+      width: 75vw;
+      font-size: 70px;
+      color: #009048;
+    }
+    /* /////////////////////////////////////////////// */
     .form-login{
       display: grid;
-      grid-template-columns: 400px;
-    
-      gap: 10px;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      justify-items: center;
+      align-items: center;
+      gap: 5px;
+    }
+    .form-login button{
+      height: 60px;
+      width: 250px;
+      font-size: 32px;
+      background-color:#006CFC ;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      color: #fff
     }
     
-    .form-login input, button {
-      height: 40px;
+    .form-login button:active {
+      box-shadow: 7px 6px 15px 1px rgba(0, 0, 0, 0.24);
+      transform: translateY(4px);
+      background-color: #368af8;
     }
-  
+    
+    .form-login input{
+      height: 60px;
+      width: 250px;
+      border: 6px #001997 solid;
+      border-radius: 6px;
+      font-size: 28px;
+      text-align: center;
+    }
+    
+    @media (min-width: 768px){
+      .form-login button, .form-login input{
+        width: 400px;
+      }
+    }
+    /* /////////////////////////////////////////// */
+    .figs-container{
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 1fr;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
+    }
   `;
     this.shadow.appendChild($style);
     this.addListeners();
@@ -53,17 +114,24 @@ class LogIn extends HTMLElement {
     $logPage.setAttribute("class", "container");
 
     $logPage.innerHTML = `
-      <h1 class="title-game">Piedra, Papel o Tijeras</h1>
-      <div class="form-container">
-        <form action="" class="form-login" id="formLog" autocomplete="off">
-          <input required type="text" class="input-tagname" maxlength="20" placeholder="TAGNAME" autofocus >
+    <div class="title-container">
+      <h1 class="title">Piedra, Papel o Tijeras</h1>
+    </div>
+    
+    <div class="form-container">
+      <form action="" class="form-login" id="formLog" autocomplete="off">
+        <input required type="text" class="input-tagname" maxlength="20" placeholder="TAGNAME" autofocus >
+        <input required type="password" class="input-pass" maxlength="20" placeholder="PASSWORD" autofocus >
+        <button class="sent-log-data" type="submit">INGRESAR</button>
+      </form>
+    </div>
 
-          <input required type="password" class="input-pass" maxlength="20" placeholder="PASSWORD" >
-
-          <button class="sent-log-data" type="submit">INGRESAR</button>
-        </form>
-      </div>
-  `;
+    <div class="figs-container">
+      <img src="${rock}" alt="">
+      <img src="${paper}" alt="">
+      <img src="${scissors}" alt="">
+    </div>
+    `;
 
     this.shadow.appendChild($logPage);
   }

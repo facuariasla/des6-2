@@ -1,6 +1,12 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
 
+const rock = require("url:../../assets/fig-rock.svg");
+const paper = require("url:../../assets/fig-note.svg");
+const scissors = require("url:../../assets/fig-scissors.svg");
+const background = require("url:../../assets/fondo.svg");
+
+
 class CreateOrNot extends HTMLElement {
   shadow: ShadowRoot;
   constructor() {
@@ -12,44 +18,98 @@ class CreateOrNot extends HTMLElement {
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
     $style.innerHTML = `
-      *{
+    *{
       box-sizing: border-box;
-       }
-      body{
-        margin: 0;
-       }
-      .container{
-        display: grid;
-        justify-content: center;
-      }
+    }
+    body{
+      margin: 0;
+    }
+    p, a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
+      margin: 0;
+    }
 
-      .data-top{
-        display:grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
-        justify-content: space-evenly;
-        align-items: center;
-      }
-      
-      .data-top .logout-btn {
-        margin-left: 5px;
-      }
-      .data-top .tagname {
-        margin: 0;
-        align-self: center;
-        justify-self: center;
-        color: orange;
-        font-weight: 700;
-      }
-
-
-      .btns-container{
-        display: grid;
-        gap: 10px;
-      }
+    .container{
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-template-rows: 5vh 45vh 25vh 25vh;
+      display: grid;
+      background-image: url(${background});
+    }
+    /* //////////////////////////////////// */
+    .header{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      font-size: 16px;
+    }
+    
+    .header .logout-btn{
+      margin-left: 5px;
+      text-decoration: none;
+      color: red;
+    }
+    
+    .header .tagname{
+      display: grid;
+      justify-items: center;
+      font-size: 22px;
+      color: orange;
+    }
+    
+    /* ////////////////// */
+    .title-container{
+      display: grid;
+      text-align: center;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
+    
+    }
+    .title-container .title{
+      font-family: 'Special Elite', cursive;  
+      margin: 0;
+      width: 75vw;
+      font-size: 70px;
+      color: #009048;
+    }
+    /* /////////////////////////////////////////////// */
+    .btns-container{
+      display: grid;
+      justify-items: center;
+      align-items: center;
+    }
+    .btns-container button{
+      height: 65px;
+      width: 250px;
+      font-size: 32px;
+      background-color:#006CFC ;
+      border: 8px #001997 solid;
+      border-radius: 6px;
+      color: #fff
+    }
+    
+    .btns-container button:active {
+      box-shadow: 7px 6px 15px 1px rgba(0, 0, 0, 0.24);
+      transform: translateY(4px);
+      background-color: #368af8;
+    }
+    
+    @media (min-width: 768px){
       .btns-container button{
-         height: 40px;
-       }
+        width: 400px;
+      }
+    }
+    /* /////////////////////////////////////////// */
+    .figs-container{
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-template-rows: 1fr;
+      justify-items: center;
+      align-items: center;
+      place-self: center;
+    }
    `;
     this.shadow.appendChild($style);
     this.addListeners();
@@ -65,24 +125,31 @@ class CreateOrNot extends HTMLElement {
     const tagnameValStorage = sessionStorage.getItem('rps.player')
     // const roomValueStore = sessionStorage.getItem('rps.roomCpde')
     const $homePage = document.createElement("div");
-    $homePage.setAttribute("class", "container-page");
+    $homePage.setAttribute("class", "container");
 
     $homePage.innerHTML = `
-    <div class="data-top">
+    <header class="header">
       <a href="" class="logout-btn">logout</a>
       <p class="tagname">${tagnameValStorage}</p>
       <div class="room-data">
       </div>
+    </header>
+  
+    <div class="title-container">
+      <h1 class="title">Piedra, Papel o Tijeras</h1>
     </div>
 
-    <div class='container'>
-      <h1 class="title-game">Piedra, Papel o Tijeras</h1>
-      <div class="btns-container">
-        <button class="new-game-btn">NUEVO JUEGO</button>
-        <button class="room-code-btn">INGRESAR A SALA</button>
-      </div>
+    <div class="btns-container">
+      <button class="new-game-btn">Nuevo Juego</button>
+      <button class="room-code-btn">Entrar como Invitado</button>
     </div>
-  `;
+
+    <div class="figs-container">
+      <img src="${rock}" alt="">
+      <img src="${paper}" alt="">
+      <img src="${scissors}" alt="">
+    </div>
+    `;
 
     this.shadow.appendChild($homePage);
   }
