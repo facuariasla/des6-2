@@ -329,6 +329,11 @@ const state = {
   subscribe(callback: (any) => any) {
     this.listeners.push(callback);
   },
+
+  unsubscribe() {
+    this.listeners = [];
+  },
+
 };
 
 export { state };

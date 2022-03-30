@@ -10,6 +10,16 @@ class Lose extends HTMLElement {
   }
 
   connectedCallback() {
+    state.unsubscribe();
+
+    // state.subscribe(() => {
+    //   const ready1 = state.getState().ready1;
+    //   const ready2 = state.getState().ready2;
+    //   if ((ready1 == true)&& (ready2== true)) {
+    //     Router.go("/game");
+    //   }
+    // });
+
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -231,6 +241,15 @@ class Lose extends HTMLElement {
     // se espera que se cambie a true con el Volver a Jugar
 
     $playBtn.addEventListener("click", () => {
+      state.subscribe(() => {
+        const ready1 = state.getState().ready1;
+        const ready2 = state.getState().ready2;
+        if ((ready1 == true)&& (ready2== true)) {
+          Router.go("/game");
+        }
+      });
+
+
 
       $btnContainer.innerHTML = `
         <button class="play-game">Volver a Jugar</button>
@@ -241,15 +260,21 @@ class Lose extends HTMLElement {
       readyState.then((res)=>{
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
-        // Se podria hacer algo como agregarlo en pantalla
-        // En vez de console.log()
-        // Router.go('/waiting')
       })
+
+      state.hearReadyChanges();
+
+
+
+
+
+
+
     });
 
-    // METER SUBSCRIBE de READY ACA, en TIE y WIN
-    // Que me envie a /game, otra vez
-    
+
+    // Si cambio el valor de ready:false
+    // Actua el subcsribe declarado en /game-rules,  y me devuelve alla
     state.readyToPlay({
       tagname: state.getState().tagname1,
       player: 'player1',

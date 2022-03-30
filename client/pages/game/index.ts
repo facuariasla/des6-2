@@ -138,18 +138,7 @@ class Game extends HTMLElement {
     this.showMyHand();
     this.showOpsHand();
 
-    // state.readyToPlay({
-    //   tagname: state.getState().tagname1,
-    //   player: 'player1',
-    //   ready: false,
-    //   nanoCode: state.getState().roomId,
-    // });
-    // state.readyToPlay({
-    //   tagname: state.getState().tagname2,
-    //   player: 'player2',
-    //   nanoCode: state.getState().roomId,
-    //   ready: false
-    // });
+
   }
 
   render() {

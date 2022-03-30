@@ -11,6 +11,16 @@ class Tie extends HTMLElement {
   }
 
   connectedCallback() {
+    state.unsubscribe();
+
+    // state.subscribe(() => {
+    //   const ready1 = state.getState().ready1;
+    //   const ready2 = state.getState().ready2;
+    //   if ((ready1 == true)&& (ready2== true)) {
+    //     Router.go("/game");
+    //   }
+    // });
+
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -232,6 +242,15 @@ class Tie extends HTMLElement {
     // console.group(checkTagname());
 
     $playBtn.addEventListener("click", () => {
+      state.subscribe(() => {
+        const ready1 = state.getState().ready1;
+        const ready2 = state.getState().ready2;
+        if ((ready1 == true)&& (ready2== true)) {
+          Router.go("/game");
+        }
+      });
+
+
       $btnContainer.innerHTML = `
       <button class="play-game">Volver a Jugar</button>
       <p>Esperando al oponente...</p>
@@ -242,12 +261,27 @@ class Tie extends HTMLElement {
       readyState.then((res)=>{
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
-        // Se podria hacer algo como agregarlo en pantalla
-        // En vez de console.log()
-        // Router.go('/waiting')
+
+        state.hearReadyChanges();
+
+   
+
+
       })
     });
 
+    state.readyToPlay({
+      tagname: state.getState().tagname1,
+      player: 'player1',
+      ready: false,
+      nanoCode: state.getState().roomId,
+    });
+    state.readyToPlay({
+      tagname: state.getState().tagname2,
+      player: 'player2',
+      nanoCode: state.getState().roomId,
+      ready: false
+    });
     // METER SUBSCRIBE de READY ACA
     // Que me envie a /game, otra vez
 
