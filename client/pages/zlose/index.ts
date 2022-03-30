@@ -249,6 +249,20 @@ class Lose extends HTMLElement {
 
     // METER SUBSCRIBE de READY ACA, en TIE y WIN
     // Que me envie a /game, otra vez
+    
+    state.readyToPlay({
+      tagname: state.getState().tagname1,
+      player: 'player1',
+      ready: false,
+      nanoCode: state.getState().roomId,
+    });
+    state.readyToPlay({
+      tagname: state.getState().tagname2,
+      player: 'player2',
+      nanoCode: state.getState().roomId,
+      ready: false
+    });
+
 
   }
 }

@@ -184,6 +184,7 @@ class Win extends HTMLElement {
       });
       Router.go('/')
     })
+  
     const $btnContainer = <HTMLInputElement>this.shadow.querySelector(".button-container");
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
@@ -212,8 +213,8 @@ class Win extends HTMLElement {
       }
     }
 
-            // cambia el valor de ready a false
-        // Se espera que se cambie a true en resultados
+    // cambia el valor de ready a false
+    // Se espera que se cambie a true en resultados
 
     // console.group(checkTagname());
 

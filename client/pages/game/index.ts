@@ -137,6 +137,19 @@ class Game extends HTMLElement {
     this.loaderContent();
     this.showMyHand();
     this.showOpsHand();
+
+    // state.readyToPlay({
+    //   tagname: state.getState().tagname1,
+    //   player: 'player1',
+    //   ready: false,
+    //   nanoCode: state.getState().roomId,
+    // });
+    // state.readyToPlay({
+    //   tagname: state.getState().tagname2,
+    //   player: 'player2',
+    //   nanoCode: state.getState().roomId,
+    //   ready: false
+    // });
   }
 
   render() {
@@ -281,7 +294,6 @@ class Game extends HTMLElement {
 
     for (const hand of eachHand) {
       hand.addEventListener("click", () => {
-        // state.hearPicks()
         handImg = <HTMLElement>hand;
         handResult = hand.id;
         handImg.style = `height: 30vh;`;
@@ -301,13 +313,11 @@ class Game extends HTMLElement {
 
         if (tagname == tagname2) {
           console.log("sos el p2", dataPlayer2);
-          state.setPick2InState(dataPlayer2.pick)
           state.setPicks(dataPlayer2).then((res) => {
             state.setPick2InState(res.pick);
           });
         } else {
           console.log("sos el p1", dataPlayer1);
-          state.setPick1InState(dataPlayer1.pick)
           state.setPicks(dataPlayer1).then((res) => {
             state.setPick1InState(res.pick);
           });
@@ -318,7 +328,7 @@ class Game extends HTMLElement {
 
     //
     setTimeout(() => {
-      if (handResult == null || undefined) {
+      if (handResult == null || undefined || '') {
         console.log("No elegiste nada", handResult);
         $handsBottom.innerText = "";
         $handsBottom.innerHTML = `
@@ -363,7 +373,110 @@ class Game extends HTMLElement {
         `;
         this.shadow.appendChild($style);
       }
+
     }, 5000);
+  }
+
+  //front -> state -> api ---> escuchador rtdb.state -> data state -> front
+  // FN muestra la mano enemiga, y al mismo tiempo, routea si ganas o perdes.
+  showOpsHand() {
+    // Falta el ref.on del state que setea el PICK del oponente
+    const tagname2conf = state.getState().tagname;
+
+    const player1 = {
+      player: "player1",
+      tagname: state.getState().tagname1,
+      nanoCode: state.getState().roomId,
+      ready: false,
+    };
+
+    const player2 = {
+      player: "player2",
+      tagname: state.getState().tagname2,
+      nanoCode: state.getState().roomId,
+      ready: false,
+    };
+
+
+    if (player2.tagname == tagname2conf) {
+      // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
+      setTimeout(() => {
+        // Despues de 5s llamo a picks del state
+        state.hearPicks();
+        const pick1 = state.getState().pick1;
+        const pick2 = state.getState().pick2;
+
+        // Renderizo la mano oponente arriba
+        // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
+        this.opHandData(pick1);
+
+        // comparo los picks
+        const theWinnerIs = this.winOrLose(pick1, pick2);
+
+        if (theWinnerIs == "player1") {
+          console.log("Perdiste");
+          setTimeout(() => {
+            Router.go('/lose')
+          }, 2000);
+        } else if (theWinnerIs == "player2") {
+          // Llama a funcion en state que agrega 1 punto a la DB addWinPointDB();
+          console.log("Ganaste!");
+          state.addWinPointDB(player2);
+          setTimeout(() => {
+            Router.go('/win')
+          }, 2000);
+        } else {
+          console.log("Empate");
+          setTimeout(() => {
+            Router.go('/tie')
+          }, 2000);
+        }
+        // 5s porque tiene en cuenta el 3,2,1 y el ya!
+      }, 5000);
+
+      // Mecanismo que me indica si gane o perdi
+      // Despues de tiempo me lleva a /win, /lose o /tie
+      // Llamado a api, que suma o no puntos
+    } else {
+      setTimeout(() => {
+        // Despues de 5s llamo a picks del state
+        state.hearPicks();
+        const pick1 = state.getState().pick1;
+        const pick2 = state.getState().pick2;
+
+        // Renderizo la mano oponente arriba
+        // SOS el PLAYER 1. por lo que se va a pintar la data de player2 arriba
+        this.opHandData(pick2);
+
+        // comparo los picks
+        const theWinnerIs = this.winOrLose(pick1, pick2);
+
+        if (theWinnerIs == "player1") {
+          // Llama a funcion en state que agrega 1 punto a la DB
+          console.log("Ganaste!");
+          state.addWinPointDB(player1);
+          setTimeout(() => {
+            Router.go('/win')
+          }, 2000);
+        } else if (theWinnerIs == "player2") {
+          console.log("Perdiste");
+          setTimeout(() => {
+            Router.go('/lose')
+          }, 2000);
+        } else {
+          console.log("Empate");
+          setTimeout(() => {
+            Router.go('/tie')
+          }, 2000);
+        }
+      }, 5000);
+
+
+
+      // Mecanismo que me indica si gane o perdi
+      // Despues de tiempo me lleva a /win, /lose o /tie
+      // Llamado a api, que suma o no puntos
+    }
   }
 
   // ejecutada en showOpsHand()
@@ -431,107 +544,6 @@ class Game extends HTMLElement {
 
         this.shadow.appendChild($style);
       };
-  }
-
-  //front -> state -> api ---> escuchador rtdb.state -> data state -> front
-  // FN muestra la mano enemiga, y al mismo tiempo, routea si ganas o perdes.
-  showOpsHand() {
-    // Falta el ref.on del state que setea el PICK del oponente
-
-    const tagname2conf = state.getState().tagname;
-
-    const player1 = {
-      player: "player1",
-      tagname: state.getState().tagname1,
-      nanoCode: state.getState().roomId,
-      ready: false,
-    };
-
-    const player2 = {
-      player: "player2",
-      tagname: state.getState().tagname2,
-      nanoCode: state.getState().roomId,
-      ready: false,
-    };
-
-    state.readyToPlay(player1)
-    state.readyToPlay(player2)
-
-    if (player2.tagname == tagname2conf) {
-      // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
-      setTimeout(() => {
-        // Despues de 5s llamo a picks del state
-        const pick1 = state.getState().pick1;
-        const pick2 = state.getState().pick2;
-
-        // Renderizo la mano oponente arriba
-        // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
-        this.opHandData(pick1);
-
-        // comparo los picks
-        const theWinnerIs = this.winOrLose(pick1, pick2);
-
-        if (theWinnerIs == "player1") {
-          console.log("Perdiste");
-          setTimeout(() => {
-            Router.go('/lose')
-          }, 2000);
-        } else if (theWinnerIs == "player2") {
-          // Llama a funcion en state que agrega 1 punto a la DB addWinPointDB();
-          console.log("Ganaste!");
-          state.addWinPointDB(player2);
-          setTimeout(() => {
-            Router.go('/win')
-          }, 2000);
-        } else {
-          console.log("Empate");
-          setTimeout(() => {
-            Router.go('/tie')
-          }, 2000);
-        }
-        // 5s porque tiene en cuenta el 3,2,1 y el ya!
-      }, 5000);
-
-      // Mecanismo que me indica si gane o perdi
-      // Despues de tiempo me lleva a /win, /lose o /tie
-      // Llamado a api, que suma o no puntos
-    } else {
-      setTimeout(() => {
-        // Despues de 5s llamo a picks del state
-        const pick1 = state.getState().pick1;
-        const pick2 = state.getState().pick2;
-
-        // Renderizo la mano oponente arriba
-        // SOS el PLAYER 1. por lo que se va a pintar la data de player2 arriba
-        this.opHandData(pick2);
-
-        // comparo los picks
-        const theWinnerIs = this.winOrLose(pick1, pick2);
-
-        if (theWinnerIs == "player1") {
-          // Llama a funcion en state que agrega 1 punto a la DB
-          console.log("Ganaste!");
-          state.addWinPointDB(player1);
-          setTimeout(() => {
-            Router.go('/win')
-          }, 2000);
-        } else if (theWinnerIs == "player2") {
-          console.log("Perdiste");
-          setTimeout(() => {
-            Router.go('/lose')
-          }, 2000);
-        } else {
-          console.log("Empate");
-          setTimeout(() => {
-            Router.go('/tie')
-          }, 2000);
-        }
-      }, 5000);
-
-      // Mecanismo que me indica si gane o perdi
-      // Despues de tiempo me lleva a /win, /lose o /tie
-      // Llamado a api, que suma o no puntos
-    }
   }
 
   // ejecutada en showOpsHand()
