@@ -8,7 +8,7 @@ import "./pages/create-or-getinto";
 import "./pages/new-game";
 import "./pages/enter-roomcode";
 import "./pages/game-rules";
-import "./pages/waiting";
+// import "./pages/waiting";
 import "./pages/game";
 import "./pages/zwin";
 import "./pages/zlose";

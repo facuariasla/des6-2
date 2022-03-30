@@ -258,8 +258,10 @@ const state = {
   },
 
 
-  hearPicks(longRoomId: string) {
-    const roomRef = realtimeDB.ref(`rooms/${longRoomId}/currentGame/`);
+  hearPicks() {
+    const rtdbLongId = this.getState().rtdbLongId;
+
+    const roomRef = realtimeDB.ref(`rooms/${rtdbLongId}/currentGame/`);
   
     return roomRef.on("value", (SnapShot) => {
       const playerData = SnapShot.val();

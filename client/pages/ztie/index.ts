@@ -15,6 +15,12 @@ class Tie extends HTMLElement {
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
     $style.innerHTML = `
+
+    p,a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
+      margin:0;
+    }
     .container-page{
       height: 100vh;
       display: grid;
@@ -77,6 +83,13 @@ class Tie extends HTMLElement {
     /* cccccccccccccccccccccc */
     .button-container{
       align-self: start;
+      justify-items: center;
+      align-items: center;
+    }
+    .button-container p{
+      margin-top:5px;
+      text-align:center;
+      font-size: 22px;
     }
     
     .button-container button{
@@ -184,6 +197,7 @@ class Tie extends HTMLElement {
       });
       Router.go('/')
     })
+    const $btnContainer = <HTMLInputElement>this.shadow.querySelector(".button-container");
 
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
@@ -218,16 +232,24 @@ class Tie extends HTMLElement {
     // console.group(checkTagname());
 
     $playBtn.addEventListener("click", () => {
+      $btnContainer.innerHTML = `
+      <button class="play-game">Volver a Jugar</button>
+      <p>Esperando al oponente...</p>
+    `;
+
+
       const readyState = state.readyToPlay(checkTagname());
       readyState.then((res)=>{
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
         // Se podria hacer algo como agregarlo en pantalla
         // En vez de console.log()
-        Router.go('/waiting')
+        // Router.go('/waiting')
       })
     });
 
+    // METER SUBSCRIBE de READY ACA
+    // Que me envie a /game, otra vez
 
   }
 }

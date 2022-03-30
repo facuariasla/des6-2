@@ -55,9 +55,8 @@ class Waiting extends HTMLElement {
     }
   `;
     this.shadow.appendChild($style);
-    // DONDE PONGO EL STATE.HEARREADYCHANGES??
+
     this.addListeners();
-    state.hearReadyChanges();
 
   }
   render() {
@@ -79,7 +78,7 @@ class Waiting extends HTMLElement {
     </div>
 
     <div class="container-mid">
-      <p class="rules-text">Esperando al pelelas...🌈</p>
+      <p class="rules-text">Esperando al oponente...🐢</p>
     </div>
     `;
 
@@ -107,6 +106,7 @@ class Waiting extends HTMLElement {
         Router.go("/game");
       }
     });
+
     // EL valor de AMBOS READY, lo pongo en el data state? ver
     // Cuando ambos valores sean true, se va a GAME
     // Caso contrario, se queda en pagina waiting (a menos que deslogee)

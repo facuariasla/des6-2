@@ -15,6 +15,12 @@ class Lose extends HTMLElement {
     $style.setAttribute("class", "style");
     $style.innerHTML = `
 
+    p,a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
+      margin:0;
+    }
+
     .container-page{
       height: 100vh;
       display: grid;
@@ -77,8 +83,15 @@ class Lose extends HTMLElement {
     /* cccccccccccccccccccccc */
     .button-container{
       align-self: start;
+      justify-items: center;
+      align-items: center;
     }
-    
+    .button-container p{
+      margin-top:5px;
+      text-align:center;
+      font-size: 22px;
+    }
+
     .button-container button{
       height: 8vh;
       width: 200px;
@@ -186,6 +199,7 @@ class Lose extends HTMLElement {
       Router.go('/')
     })
 
+    const $btnContainer = <HTMLInputElement>this.shadow.querySelector(".button-container");
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
     function checkTagname() {
@@ -213,22 +227,28 @@ class Lose extends HTMLElement {
       }
     }
 
-            // cambia el valor de ready a false
-        // Se espera que se cambie a true en resultados
-
-    // console.group(checkTagname());
+    // cambia el valor de ready a false en /game
+    // se espera que se cambie a true con el Volver a Jugar
 
     $playBtn.addEventListener("click", () => {
+
+      $btnContainer.innerHTML = `
+        <button class="play-game">Volver a Jugar</button>
+        <p>Esperando al oponente...</p>
+      `;
+
       const readyState = state.readyToPlay(checkTagname());
       readyState.then((res)=>{
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
         // Se podria hacer algo como agregarlo en pantalla
         // En vez de console.log()
-        Router.go('/waiting')
+        // Router.go('/waiting')
       })
     });
 
+    // METER SUBSCRIBE de READY ACA, en TIE y WIN
+    // Que me envie a /game, otra vez
 
   }
 }

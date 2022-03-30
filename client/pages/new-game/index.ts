@@ -10,6 +10,13 @@ class NewGame extends HTMLElement {
   }
   connectedCallback() {
     state.hearOnline();
+    state.subscribe(() => {
+      const online1 = state.getState().online1;
+      const online2 = state.getState().online2;
+      if (online1 == true && online2 === true) {
+        Router.go("/game-rules");
+      }
+    });
 
     this.render();
     const $style = document.createElement("style");
@@ -155,13 +162,7 @@ class NewGame extends HTMLElement {
     // // No se si hearOnline() actua solo o no
     // state.hearOnline();
 
-    state.subscribe(() => {
-      const online1 = state.getState().online1;
-      const online2 = state.getState().online2;
-      if (online1 == true && online2 === true) {
-        Router.go("/game-rules");
-      }
-    });
+ 
 
 
   }

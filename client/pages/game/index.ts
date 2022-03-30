@@ -281,6 +281,7 @@ class Game extends HTMLElement {
 
     for (const hand of eachHand) {
       hand.addEventListener("click", () => {
+        // state.hearPicks()
         handImg = <HTMLElement>hand;
         handResult = hand.id;
         handImg.style = `height: 30vh;`;

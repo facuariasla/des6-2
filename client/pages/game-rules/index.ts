@@ -10,6 +10,15 @@ class GameRules extends HTMLElement {
   }
 
   connectedCallback() {
+    // state.hearReadyChanges();
+    state.subscribe(() => {
+      const ready1 = state.getState().ready1;
+      const ready2 = state.getState().ready2;
+      if ((ready1 == true)&& (ready2== true)) {
+        Router.go("/game");
+      }
+    });
+
     
     this.render();
     const $style = document.createElement("style");
@@ -92,6 +101,10 @@ class GameRules extends HTMLElement {
   }
 
   render() {
+    // DONDE PONGO EL STATE.HEARREADYCHANGES??
+    // Ejecucion del subscribe a final del addListeners();
+
+
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
 
@@ -145,7 +158,9 @@ class GameRules extends HTMLElement {
       Router.go('/')
     })
 
+    const $containerMid = <HTMLDivElement>this.shadow.querySelector(".container-mid");
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
+
 
       const dataplayer1 = {
         tagname: state.getState().tagname,
@@ -175,15 +190,24 @@ class GameRules extends HTMLElement {
 
     $playBtn.addEventListener("click", () => {
 
+      $containerMid.innerHTML = `
+      <p class="rules-text">Presiona jugar y elegí: piedra, papel o tijeras antes de que pasen los 3 segundos</p>
+      <p class="rules-text">Esperando al oponente...🐢</p>
+      `;
+
       const readyState = state.readyToPlay(dataSend);
       readyState.then((res)=>{
-        Router.go('/waiting')
         const playerReadyMSG = res.message
         console.log(playerReadyMSG)
+         state.hearReadyChanges();
         // Se podria hacer algo como agregarlo en pantalla
         // En vez de console.log()
       })
+      // Router.go("/waiting");
     });
+
+    // Ver donde va el subscribe
+
 
 
   }
