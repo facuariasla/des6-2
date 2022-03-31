@@ -314,6 +314,42 @@ app.post("/get-score", (req, res) => {
     });
 });
 
+// Elimina los valores de la rtdb actual y se desconecta (va a home)
+// Utilizado en el boton QUIT. 
+// A partir del ingreso a la sala en adelante (?)
+app.post("/disconect", (req, res) =>{
+  const { player } = req.body;
+  const { nanoCode } = req.body;
+
+  roomsColl
+  .doc(nanoCode)
+  .get()
+  .then((snap) => {
+    const roomDBData = snap.data();
+    const longId = roomDBData.rtdbRoomId;
+    console.log(longId);
+
+    const roomRef = rtdb.ref(`rooms/${longId}/currentGame/${player}/`);
+    roomRef
+      .update({
+        online: false,
+        ready: false,
+        pick: "",
+        tagname:"",
+        userId:""
+      })
+      .then(() => {
+        res.status(201).json({
+          message: `El ${player} se ha desconectado`
+        });
+      });
+  });
+
+
+
+})
+
+
 app.listen(port, () => {
   console.log(`API listenting in ${port}`);
 });

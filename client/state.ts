@@ -311,6 +311,20 @@ const state = {
     this.setState(currentState); 
   },
 
+  disconect(dataPlayer){
+    return fetch(API_BASE_URL + "/get-score", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(dataPlayer),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        return data;
+
+      });
+  },
   // CREAR FUNCION QUE ACTUE CON EL BOTON LOGOUT
   // QUE BORRE o CAMBIE TODA LA INFO DEL PLAYER en cuestion
 
