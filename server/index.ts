@@ -300,6 +300,7 @@ app.post("/add-points", (req, res) => {
           console.log(`Point added to ${player} at ${res.writeTime.toDate()}`);
         });
       res.status(201).json({
+        score: roomDBData.score,
         message: `Point added to ${player}`,
         tagname: tagname,
         nanoCode: nanoCode,

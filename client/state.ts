@@ -296,24 +296,28 @@ const state = {
       });
   },
 
-  // Usado en RESULTS
-  getScoreDB(docId: string){
+  // Usado en RESULTS - actualmente no usado
+  getScoreDB(roomId){
     return fetch(API_BASE_URL + "/get-score", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(docId),
+      body: JSON.stringify(roomId),
     })
       .then((res) => {
         return res.json();
       })
       .then((data) => {
         return data;
+
       });
   },
 
-  // Usado en /win /lose /tie
-  setActualScore(score: object){
-
+  // Usado en /win /lose /tie - actualmente no usado
+  setActualScore(score){
+    const currentState = this.getState();
+    currentState.score1 = score.score1;
+    currentState.score2 = score.score2;
+    this.setState(currentState); 
   },
 
 

@@ -12,13 +12,7 @@ class Lose extends HTMLElement {
   connectedCallback() {
     state.unsubscribe();
 
-    // state.subscribe(() => {
-    //   const ready1 = state.getState().ready1;
-    //   const ready2 = state.getState().ready2;
-    //   if ((ready1 == true)&& (ready2== true)) {
-    //     Router.go("/game");
-    //   }
-    // });
+
 
     this.render();
     const $style = document.createElement("style");
@@ -167,6 +161,7 @@ class Lose extends HTMLElement {
   }
 
   addListeners() {
+
     // Cambio ambos estados de READY a false
     // Este cambio se vuelve true cuando el user clickee en 'volver a jugar'
     state.readyToPlay({

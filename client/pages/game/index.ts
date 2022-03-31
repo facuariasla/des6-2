@@ -20,7 +20,13 @@ class Game extends HTMLElement {
     $style.setAttribute("class", "style");
     $style.innerHTML = `
     
-    body, p{
+    body{
+      margin: 0;
+    }
+
+    p, a, button, input {
+      font-family: 'Odibee Sans', cursive;
+      letter-spacing: 1px;
       margin: 0;
     }
 
@@ -51,23 +57,22 @@ class Game extends HTMLElement {
       font-weight: 600;
     }
     
-    
-    .header .logout-btn{
-      margin-left: 10px;  
-      margin-top: 10px;
-      text-decoration:none;
-    }
-    
     .header div {
       text-align: center;
     }
     
     .score-info p{
       display: inline;
+      font-size: 20px;
     }
     .score-number{
       display: inline;
       color: orangered;
+      font-size: 18px;
+    }
+
+    .header .room-info{
+      font-size: 20px;
     }
     /* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */
     
@@ -103,6 +108,7 @@ class Game extends HTMLElement {
     
     .loader-val{
       font-size: 12vh;
+      font-family: 'Special Elite', cursive;  
     }
     /* dddddddddddddddddddddddddddddddddddddddddddddddddddddd */
     
@@ -162,7 +168,7 @@ class Game extends HTMLElement {
 
     $homePage.innerHTML = `
     <header class="header">
-        <a href="" class="logout-btn">QUIT</a>
+        <a href="" class="logout-btn"></a>
 
         <div class="score-info">
           <div class="player1">
@@ -394,7 +400,8 @@ class Game extends HTMLElement {
         state.hearPicks();
         const pick1 = state.getState().pick1;
         const pick2 = state.getState().pick2;
-
+        const score1 = state.getState().score1;
+        const score2 = state.getState().score2;
         // Renderizo la mano oponente arriba
         // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
         this.opHandData(pick1);
@@ -404,6 +411,10 @@ class Game extends HTMLElement {
 
         if (theWinnerIs == "player1") {
           console.log("Perdiste");
+          state.setActualScore({
+            score1: score1 + 1,
+            score2: score2
+          });
           setTimeout(() => {
             Router.go('/lose')
           }, 2000);
@@ -411,6 +422,10 @@ class Game extends HTMLElement {
           // Llama a funcion en state que agrega 1 punto a la DB addWinPointDB();
           console.log("Ganaste!");
           state.addWinPointDB(player2);
+          state.setActualScore({
+            score1: score1,
+            score2: score2 + 1
+          });
           setTimeout(() => {
             Router.go('/win')
           }, 2000);
@@ -420,18 +435,18 @@ class Game extends HTMLElement {
             Router.go('/tie')
           }, 2000);
         }
+    
         // 5s porque tiene en cuenta el 3,2,1 y el ya!
       }, 5000);
 
-      // Mecanismo que me indica si gane o perdi
-      // Despues de tiempo me lleva a /win, /lose o /tie
-      // Llamado a api, que suma o no puntos
     } else {
       setTimeout(() => {
         // Despues de 5s llamo a picks del state
         state.hearPicks();
         const pick1 = state.getState().pick1;
         const pick2 = state.getState().pick2;
+        const score1 = state.getState().score1;
+        const score2 = state.getState().score2;
 
         // Renderizo la mano oponente arriba
         // SOS el PLAYER 1. por lo que se va a pintar la data de player2 arriba
@@ -443,12 +458,20 @@ class Game extends HTMLElement {
         if (theWinnerIs == "player1") {
           // Llama a funcion en state que agrega 1 punto a la DB
           console.log("Ganaste!");
+          state.setActualScore({
+            score1: score1 + 1,
+            score2: score2
+          });
           state.addWinPointDB(player1);
           setTimeout(() => {
             Router.go('/win')
           }, 2000);
         } else if (theWinnerIs == "player2") {
           console.log("Perdiste");
+          state.setActualScore({
+            score1: score1,
+            score2: score2 + 1
+          });
           setTimeout(() => {
             Router.go('/lose')
           }, 2000);
@@ -458,13 +481,9 @@ class Game extends HTMLElement {
             Router.go('/tie')
           }, 2000);
         }
+
       }, 5000);
 
-
-
-      // Mecanismo que me indica si gane o perdi
-      // Despues de tiempo me lleva a /win, /lose o /tie
-      // Llamado a api, que suma o no puntos
     }
   }
 
@@ -500,8 +519,6 @@ class Game extends HTMLElement {
         `;
         this.shadow.appendChild($style);
 
-        //agregar evento que despues de un par de segundos me lleve a resultados
-        // Agregar mecanismo que manda el dato 'null' o 'lose' al state
       } else {
         console.log(pickVal);
 

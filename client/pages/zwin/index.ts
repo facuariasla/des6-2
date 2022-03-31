@@ -12,15 +12,6 @@ class Win extends HTMLElement {
   connectedCallback() {
     state.unsubscribe();
 
-    // state.subscribe(() => {
-    //   const ready1 = state.getState().ready1;
-    //   const ready2 = state.getState().ready2;
-    //   if ((ready1 == true)&& (ready2== true)) {
-    //     Router.go("/game");
-    //   }
-    // });
-
-
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -230,6 +221,7 @@ class Win extends HTMLElement {
     // console.group(checkTagname());
 
     $playBtn.addEventListener("click", () => {
+
       state.subscribe(() => {
         const ready1 = state.getState().ready1;
         const ready2 = state.getState().ready2;
@@ -238,12 +230,10 @@ class Win extends HTMLElement {
         }
       });
 
-
       $btnContainer.innerHTML = `
         <button class="play-game">Volver a Jugar</button>
         <p>Esperando al oponente...</p>
       `;
-
 
       const readyState = state.readyToPlay(checkTagname());
       readyState.then((res)=>{
@@ -269,9 +259,6 @@ class Win extends HTMLElement {
       nanoCode: state.getState().roomId,
       ready: false
     });
-    // METER SUBSCRIBE de READY ACA
-    // Que me envie a /game, otra vez
-
 
   }
 }
