@@ -143,8 +143,6 @@ class Game extends HTMLElement {
     this.loaderContent();
     this.showMyHand();
     this.showOpsHand();
-
-
   }
 
   render() {
@@ -228,7 +226,7 @@ class Game extends HTMLElement {
         online1: false,
         pick1: null,
         score1: 0,
-    
+
         score2: 0,
         tagname: null,
         tagname2: null,
@@ -323,7 +321,7 @@ class Game extends HTMLElement {
 
     //
     setTimeout(() => {
-      if (handResult == null || undefined || '') {
+      if (handResult == null || undefined || "") {
         console.log("No elegiste nada", handResult);
         $handsBottom.innerText = "";
         $handsBottom.innerHTML = `
@@ -368,7 +366,6 @@ class Game extends HTMLElement {
         `;
         this.shadow.appendChild($style);
       }
-
     }, 5000);
   }
 
@@ -392,7 +389,6 @@ class Game extends HTMLElement {
       ready: false,
     };
 
-
     if (player2.tagname == tagname2conf) {
       // SOS el PLAYER 2. por lo que se va a pintar la data de player1 arriba
       setTimeout(() => {
@@ -413,10 +409,10 @@ class Game extends HTMLElement {
           console.log("Perdiste");
           state.setActualScore({
             score1: score1 + 1,
-            score2: score2
+            score2: score2,
           });
           setTimeout(() => {
-            Router.go('/lose')
+            Router.go("/lose");
           }, 2000);
         } else if (theWinnerIs == "player2") {
           // Llama a funcion en state que agrega 1 punto a la DB addWinPointDB();
@@ -424,21 +420,20 @@ class Game extends HTMLElement {
           state.addWinPointDB(player2);
           state.setActualScore({
             score1: score1,
-            score2: score2 + 1
+            score2: score2 + 1,
           });
           setTimeout(() => {
-            Router.go('/win')
+            Router.go("/win");
           }, 2000);
         } else {
           console.log("Empate");
           setTimeout(() => {
-            Router.go('/tie')
+            Router.go("/tie");
           }, 2000);
         }
-    
+
         // 5s porque tiene en cuenta el 3,2,1 y el ya!
       }, 5000);
-
     } else {
       setTimeout(() => {
         // Despues de 5s llamo a picks del state
@@ -460,30 +455,28 @@ class Game extends HTMLElement {
           console.log("Ganaste!");
           state.setActualScore({
             score1: score1 + 1,
-            score2: score2
+            score2: score2,
           });
           state.addWinPointDB(player1);
           setTimeout(() => {
-            Router.go('/win')
+            Router.go("/win");
           }, 2000);
         } else if (theWinnerIs == "player2") {
           console.log("Perdiste");
           state.setActualScore({
             score1: score1,
-            score2: score2 + 1
+            score2: score2 + 1,
           });
           setTimeout(() => {
-            Router.go('/lose')
+            Router.go("/lose");
           }, 2000);
         } else {
           console.log("Empate");
           setTimeout(() => {
-            Router.go('/tie')
+            Router.go("/tie");
           }, 2000);
         }
-
       }, 5000);
-
     }
   }
 
@@ -495,14 +488,14 @@ class Game extends HTMLElement {
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
 
-      if (pickVal === null || undefined || "") {
-        console.log("El oponente no eligio nada", pickVal);
-        $handsTOP.innerText = "";
-        $handsTOP.innerHTML = `
+    if (pickVal === null || undefined || "") {
+      console.log("El oponente no eligio nada", pickVal);
+      $handsTOP.innerText = "";
+      $handsTOP.innerHTML = `
           <img src="${okHand}" alt="" class="hand" id="ok-hand">
         `;
 
-        $style.innerHTML = `
+      $style.innerHTML = `
         .hand-top-container{
           display: grid;
           grid-template-columns: 1fr;
@@ -517,23 +510,22 @@ class Game extends HTMLElement {
           height: 30vh;
         }
         `;
-        this.shadow.appendChild($style);
+      this.shadow.appendChild($style);
+    } else {
+      console.log(pickVal);
 
-      } else {
-        console.log(pickVal);
+      const values = {
+        rock: $rock,
+        paper: $paper,
+        scissors: $scissors,
+      };
 
-        const values = {
-          rock: $rock,
-          paper: $paper,
-          scissors: $scissors,
-        };
-
-        $handsTOP.innerText = "";
-        $handsTOP.innerHTML = `
+      $handsTOP.innerText = "";
+      $handsTOP.innerHTML = `
           <img src="${values[pickVal]}" alt="" class="hand" id="ok-hand">
         `;
 
-        $style.innerHTML = `
+      $style.innerHTML = `
         .hand-top-container{
           display: grid;
           grid-template-columns: 1fr;
@@ -548,8 +540,8 @@ class Game extends HTMLElement {
         }
         `;
 
-        this.shadow.appendChild($style);
-      };
+      this.shadow.appendChild($style);
+    }
   }
 
   // ejecutada en showOpsHand()

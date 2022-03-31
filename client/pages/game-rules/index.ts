@@ -14,12 +14,11 @@ class GameRules extends HTMLElement {
     state.subscribe(() => {
       const ready1 = state.getState().ready1;
       const ready2 = state.getState().ready2;
-      if ((ready1 == true)&& (ready2== true)) {
+      if (ready1 == true && ready2 == true) {
         Router.go("/game");
       }
     });
 
-    
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -104,7 +103,6 @@ class GameRules extends HTMLElement {
     // DONDE PONGO EL STATE.HEARREADYCHANGES??
     // Ejecucion del subscribe a final del addListeners();
 
-
     const tagNameVal = state.getState().tagname;
     const roomIdVal = state.getState().roomId;
 
@@ -131,10 +129,12 @@ class GameRules extends HTMLElement {
   }
 
   addListeners() {
-    const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
+    const $logOutBtn = <HTMLInputElement>(
+      this.shadow.querySelector(".logout-btn")
+    );
 
-    $logOutBtn.addEventListener('click', () =>{
-      sessionStorage.removeItem('rps.player');
+    $logOutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("rps.player");
       state.setState({
         // El tagname1 es el p1, y el tagname y tagname2 el p2
         tagname1: null,
@@ -146,7 +146,7 @@ class GameRules extends HTMLElement {
         online1: false,
         pick1: null,
         score1: 0,
-    
+
         score2: 0,
         tagname: null,
         tagname2: null,
@@ -155,61 +155,50 @@ class GameRules extends HTMLElement {
         online2: false,
         pick2: null,
       });
-      Router.go('/')
-    })
+      Router.go("/");
+    });
 
-    const $containerMid = <HTMLDivElement>this.shadow.querySelector(".container-mid");
+    const $containerMid = <HTMLDivElement>(
+      this.shadow.querySelector(".container-mid")
+    );
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
+    const dataplayer1 = {
+      tagname: state.getState().tagname,
+      player: "player1",
+      ready: true,
+      nanoCode: state.getState().roomId,
+    };
+    const dataplayer2 = {
+      tagname: state.getState().tagname2,
+      player: "player2",
+      ready: true,
+      nanoCode: state.getState().roomId,
+    };
 
-      const dataplayer1 = {
-        tagname: state.getState().tagname,
-        player: "player1",
-        ready: true,
-        nanoCode: state.getState().roomId
-      };
-      const dataplayer2 = {
-        tagname: state.getState().tagname2,
-        player: "player2",
-        ready: true,
-        nanoCode: state.getState().roomId
-      };
-      // Si en algun momento el player2 sale del game para CREAR un game nuevo
-      // debemos eliminar la data de state tagname2 (escribir code)
-      // Ya que sino, rompe el flujo
-      // [Boton que me saque del game actual y elimine su info(pick, ready etc)]
-      let dataSend;
-      if (dataplayer1.tagname == dataplayer2.tagname) {
-        dataSend =  dataplayer2;
-      } else {
-        dataSend =  dataplayer1;
-      }
-    
+    let dataSend;
+    if (dataplayer1.tagname == dataplayer2.tagname) {
+      dataSend = dataplayer2;
+    } else {
+      dataSend = dataplayer1;
+    }
 
-    // console.group(checkTagname());
 
     $playBtn.addEventListener("click", () => {
-
       $containerMid.innerHTML = `
       <p class="rules-text">Presiona jugar y elegí: piedra, papel o tijeras antes de que pasen los 3 segundos</p>
       <p class="rules-text">Esperando al oponente...🐢</p>
       `;
 
       const readyState = state.readyToPlay(dataSend);
-      readyState.then((res)=>{
-        const playerReadyMSG = res.message
-        console.log(playerReadyMSG)
-         state.hearReadyChanges();
+      readyState.then((res) => {
+        const playerReadyMSG = res.message;
+        console.log(playerReadyMSG);
+        state.hearReadyChanges();
         // Se podria hacer algo como agregarlo en pantalla
         // En vez de console.log()
-      })
-      // Router.go("/waiting");
+      });
     });
-
-    // Ver donde va el subscribe
-
-
-
   }
 }
 

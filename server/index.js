@@ -15,8 +15,7 @@ var roomsColl = database_1.firestore.collection("rooms");
 app.get("/testeo", function (req, res) {
     res.json({ parece: "que anda este get" });
 });
-//MINUTO 35 clase 5 rooms
-// el tagname (se revisa si ya existe en la database)
+
 app.post("/signup", function (req, res) {
     // const tagname = req.body.tagname;
     //Es lo mismo que:
@@ -46,12 +45,7 @@ app.post("/signup", function (req, res) {
         }
     });
 });
-//Se pasa un tagname, y un password
-// revisa si el tagname existe, si no existe da un 'not found'
-// si existe, revisa el password de la database con el ingresado
-// si no es da FALSE, si es da TRUE
-// En el STATE, solo ingresa si es TRUE la respuesta a un fetch
-// CHECKEAR SI TENDRIA QUE SER ASI EL MECANISMO
+
 app.post("/auth", function (req, res) {
     var tagname = req.body.tagname;
     var password = req.body.password;

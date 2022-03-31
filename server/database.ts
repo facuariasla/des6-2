@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
-import * as serviceAccount from "./rps-game-key.json"
-// const serviceAccount = require("./key.json");
+const serviceAccount = require("./rps-game-key.json");
+
+// import * as serviceAccount from "./rps-game-key.json"
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as any),

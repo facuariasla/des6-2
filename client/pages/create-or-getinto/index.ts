@@ -120,7 +120,6 @@ class CreateOrNot extends HTMLElement {
     // Que me envie logearme o registrame
     // Para esto -> Debo REGISTRAR el tag en la sesion o no? 
     // El tag o roomid en la sesion seguira estando por mas que f5
-    // Pero el resto de valores del code se toman desde el STATE (preguntar)
 
     const tagnameValStorage = sessionStorage.getItem('rps.player')
     // const roomValueStore = sessionStorage.getItem('rps.roomCpde')

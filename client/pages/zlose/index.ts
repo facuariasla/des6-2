@@ -12,8 +12,6 @@ class Lose extends HTMLElement {
   connectedCallback() {
     state.unsubscribe();
 
-
-
     this.render();
     const $style = document.createElement("style");
     $style.setAttribute("class", "style");
@@ -131,7 +129,6 @@ class Lose extends HTMLElement {
     const tagnameP2 = state.getState().tagname2;
     const scoreP2 = state.getState().score2;
 
-
     const $homePage = document.createElement("div");
     $homePage.setAttribute("class", "container-page");
 
@@ -161,26 +158,27 @@ class Lose extends HTMLElement {
   }
 
   addListeners() {
-
     // Cambio ambos estados de READY a false
     // Este cambio se vuelve true cuando el user clickee en 'volver a jugar'
     state.readyToPlay({
       tagname: state.getState().tagname,
       player: "player1",
       ready: true,
-      nanoCode: state.getState().roomId
+      nanoCode: state.getState().roomId,
     });
     state.readyToPlay({
       tagname: state.getState().tagname2,
       player: "player2",
       ready: true,
-      nanoCode: state.getState().roomId
+      nanoCode: state.getState().roomId,
     });
 
-    const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
+    const $logOutBtn = <HTMLInputElement>(
+      this.shadow.querySelector(".logout-btn")
+    );
 
-    $logOutBtn.addEventListener('click', () =>{
-      sessionStorage.removeItem('rps.player');
+    $logOutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("rps.player");
       state.setState({
         // El tagname1 es el p1, y el tagname y tagname2 el p2
         tagname1: null,
@@ -192,7 +190,7 @@ class Lose extends HTMLElement {
         online1: false,
         pick1: null,
         score1: 0,
-    
+
         score2: 0,
         tagname: null,
         tagname2: null,
@@ -201,10 +199,12 @@ class Lose extends HTMLElement {
         online2: false,
         pick2: null,
       });
-      Router.go('/')
-    })
+      Router.go("/");
+    });
 
-    const $btnContainer = <HTMLInputElement>this.shadow.querySelector(".button-container");
+    const $btnContainer = <HTMLInputElement>(
+      this.shadow.querySelector(".button-container")
+    );
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
     function checkTagname() {
@@ -212,39 +212,30 @@ class Lose extends HTMLElement {
         tagname: state.getState().tagname,
         player: "player1",
         ready: true,
-        nanoCode: state.getState().roomId
+        nanoCode: state.getState().roomId,
       };
       const dataplayer2 = {
         tagname: state.getState().tagname2,
         player: "player2",
         ready: true,
-        nanoCode: state.getState().roomId
+        nanoCode: state.getState().roomId,
       };
-      // Si en algun momento el player2 sale del game para CREAR un game nuevo
-      // debemos eliminar la data de state tagname2 (escribir code)
-      // Ya que sino, rompe el flujo
-      // [Boton que me saque del game actual y elimine su info(pick, ready etc)]
-      if (dataplayer1.tagname == dataplayer2.tagname) {
 
+      if (dataplayer1.tagname == dataplayer2.tagname) {
         return dataplayer2;
       } else {
         return dataplayer1;
       }
     }
 
-    // cambia el valor de ready a false en /game
-    // se espera que se cambie a true con el Volver a Jugar
-
     $playBtn.addEventListener("click", () => {
       state.subscribe(() => {
         const ready1 = state.getState().ready1;
         const ready2 = state.getState().ready2;
-        if ((ready1 == true)&& (ready2== true)) {
+        if (ready1 == true && ready2 == true) {
           Router.go("/game");
         }
       });
-
-
 
       $btnContainer.innerHTML = `
         <button class="play-game">Volver a Jugar</button>
@@ -252,38 +243,28 @@ class Lose extends HTMLElement {
       `;
 
       const readyState = state.readyToPlay(checkTagname());
-      readyState.then((res)=>{
-        const playerReadyMSG = res.message
-        console.log(playerReadyMSG)
-      })
+      readyState.then((res) => {
+        const playerReadyMSG = res.message;
+        console.log(playerReadyMSG);
+      });
 
       state.hearReadyChanges();
-
-
-
-
-
-
-
     });
-
 
     // Si cambio el valor de ready:false
     // Actua el subcsribe declarado en /game-rules,  y me devuelve alla
     state.readyToPlay({
       tagname: state.getState().tagname1,
-      player: 'player1',
+      player: "player1",
       ready: false,
       nanoCode: state.getState().roomId,
     });
     state.readyToPlay({
       tagname: state.getState().tagname2,
-      player: 'player2',
+      player: "player2",
       nanoCode: state.getState().roomId,
-      ready: false
+      ready: false,
     });
-
-
   }
 }
 

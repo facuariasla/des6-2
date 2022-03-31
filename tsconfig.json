@@ -3,6 +3,6 @@
     "target": "ESnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "module": "CommonJS"
+    // "module": "CommonJS"
   },
 }

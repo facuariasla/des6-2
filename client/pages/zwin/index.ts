@@ -120,8 +120,7 @@ class Win extends HTMLElement {
   }
 
   render() {
-    // Revisar de donde llamo la data
-    // Si de sessionStorage o del state
+    // Llamo de sessionStorage o del state?
     // Al actualizar la pagina se borra la data del state, de sessionStorage no
     const tagnameP1 = state.getState().tagname1;
     const scoreP1 = state.getState().score1;
@@ -158,12 +157,12 @@ class Win extends HTMLElement {
   }
 
   addListeners() {
+    const $logOutBtn = <HTMLInputElement>(
+      this.shadow.querySelector(".logout-btn")
+    );
 
-
-    const $logOutBtn = <HTMLInputElement>this.shadow.querySelector('.logout-btn');
-
-    $logOutBtn.addEventListener('click', () =>{
-      sessionStorage.removeItem('rps.player');
+    $logOutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("rps.player");
       state.setState({
         // El tagname1 es el p1, y el tagname y tagname2 el p2
         tagname1: null,
@@ -175,7 +174,7 @@ class Win extends HTMLElement {
         online1: false,
         pick1: null,
         score1: 0,
-    
+
         score2: 0,
         tagname: null,
         tagname2: null,
@@ -184,10 +183,12 @@ class Win extends HTMLElement {
         online2: false,
         pick2: null,
       });
-      Router.go('/')
-    })
-  
-    const $btnContainer = <HTMLInputElement>this.shadow.querySelector(".button-container");
+      Router.go("/");
+    });
+
+    const $btnContainer = <HTMLInputElement>(
+      this.shadow.querySelector(".button-container")
+    );
     const $playBtn = <HTMLInputElement>this.shadow.querySelector(".play-game");
 
     function checkTagname() {
@@ -195,37 +196,27 @@ class Win extends HTMLElement {
         tagname: state.getState().tagname,
         player: "player1",
         ready: true,
-        nanoCode: state.getState().roomId
+        nanoCode: state.getState().roomId,
       };
       const dataplayer2 = {
         tagname: state.getState().tagname2,
         player: "player2",
         ready: true,
-        nanoCode: state.getState().roomId
+        nanoCode: state.getState().roomId,
       };
-      // Si en algun momento el player2 sale del game para CREAR un game nuevo
-      // debemos eliminar la data de state tagname2 (escribir code)
-      // Ya que sino, rompe el flujo
-      // [Boton que me saque del game actual y elimine su info(pick, ready etc)]
-      if (dataplayer1.tagname == dataplayer2.tagname) {
 
+      if (dataplayer1.tagname == dataplayer2.tagname) {
         return dataplayer2;
       } else {
         return dataplayer1;
       }
     }
 
-    // cambia el valor de ready a false
-    // Se espera que se cambie a true en resultados
-
-    // console.group(checkTagname());
-
     $playBtn.addEventListener("click", () => {
-
       state.subscribe(() => {
         const ready1 = state.getState().ready1;
         const ready2 = state.getState().ready2;
-        if ((ready1 == true)&& (ready2== true)) {
+        if (ready1 == true && ready2 == true) {
           Router.go("/game");
         }
       });
@@ -236,30 +227,26 @@ class Win extends HTMLElement {
       `;
 
       const readyState = state.readyToPlay(checkTagname());
-      readyState.then((res)=>{
-        const playerReadyMSG = res.message
-        console.log(playerReadyMSG)
+      readyState.then((res) => {
+        const playerReadyMSG = res.message;
+        console.log(playerReadyMSG);
 
         state.hearReadyChanges();
-
-      })
+      });
     });
-
-
 
     state.readyToPlay({
       tagname: state.getState().tagname1,
-      player: 'player1',
+      player: "player1",
       ready: false,
       nanoCode: state.getState().roomId,
     });
     state.readyToPlay({
       tagname: state.getState().tagname2,
-      player: 'player2',
+      player: "player2",
       nanoCode: state.getState().roomId,
-      ready: false
+      ready: false,
     });
-
   }
 }
 

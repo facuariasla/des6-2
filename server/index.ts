@@ -4,14 +4,13 @@ import * as path from "path";
 import * as cors from "cors";
 import { rtdb, firestore } from "./database";
 import { nanoid } from "nanoid";
-import { triggerAsyncId } from "async_hooks";
 
 const app = express();
 const port = process.env.PORT || 3050;
 
 //midlewares
 app.use(express.json());
-app.use(express.static("../dist"));
+app.use(express.static("dist"));
 app.use(cors());
 
 const rutaRelativa = path.resolve(__dirname, "../dist/", "index.html");
@@ -207,9 +206,6 @@ app.post("/go-to-a-room", (req, res) => {
           });
       }
     });
-
-  // El solo hecho de poenr el code, le da el valor de online:true?
-  // Poner RESTRICCION de que si el objeto SALA tiene una longitud de 2, no te deje ingresar (?)
 });
 
 // Cambia valor a ready en rtdb
@@ -219,8 +215,6 @@ app.post("/readytoplay", (req, res) => {
   const { tagname } = req.body;
   const { nanoCode } = req.body;
 
-  //Si no funciona recordar y ver mas arriba el TRY-CATCH
-  //Ya que no tiene filtro de error (si no existe algun dato)
   roomsColl
     .doc(nanoCode)
     .get()
@@ -246,8 +240,6 @@ app.post("/readytoplay", (req, res) => {
     });
 });
 
-// Analizar si cambio los valores de ready a false aca
-// para esperar a que sean true en results (y volver a jugar)
 app.post("/setting-picks", (req, res) => {
   const { player } = req.body;
   const { pick } = req.body;
@@ -283,8 +275,6 @@ app.post("/add-points", (req, res) => {
   const { player } = req.body;
   const { tagname } = req.body;
 
-  // .... construir api que agrega puntos en la DB cuando gana 1
-  // Que devuelva el score de ambos players (?)
   roomsColl
     .doc(nanoCode)
     .get()
@@ -324,29 +314,10 @@ app.post("/get-score", (req, res) => {
     });
 });
 
-// Endpoint que me elimina la rtdb y la db asociada. Las salas son temporales
-app.post("/disconected", (req, res) =>{
-
-})
-
 app.listen(port, () => {
   console.log(`API listenting in ${port}`);
 });
 
-// version inicial
-// estructura (carpetas/archivos)
-// front basico (una pantalla que llame al back)
-//back basico (1 endpoint)
-//deploy a heroku
-
-//version avanzada
-//funciona
-
-//ajustes
-//optimizar codigo: volumen, y lectura
-//chequeo paso a paso
-
-// Cualquier ruta no existente me envia a /index.html
 app.get("*", (req, res) => {
   res.sendFile(`${rutaRelativa}`);
 });

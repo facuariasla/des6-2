@@ -26,7 +26,6 @@ const state = {
     pick2: null,
   },
 
-  //array de funciones que devuelven data
   listeners: [],
 
   getState() {
@@ -111,8 +110,8 @@ const state = {
     currentState.userId = userId;
     this.setState(currentState);
   },
-  // page /create-or ****************************************************
 
+  // page /create-or ****************************************************
   setIdToShare(rtdbLongId: string) {
     const currentState = this.getState();
     currentState.rtdbLongId = rtdbLongId;
@@ -130,13 +129,7 @@ const state = {
       })
       .then((data) => {
         return data;
-        this.hearOnline()
       });
-    // hacer un fetch a la API que tiene la informacion de la RTDB?
-    // Si no coincide el roomCode, no ingresa. 'message'
-    // Si el roomCode coincide, pero el owner no esta. 'message'
-    // Si el roomCode coincide, y en el objeto room solo hay 1 objeto (es decir el owner) ---> Ingresar
-    // El code va a parar al state
   },
 
   // tagname que se setea cuando se ingresa como INVITADO
@@ -163,8 +156,7 @@ const state = {
   hearOnline() {
     const longRoomId = this.getState().rtdbLongId;
     const roomRef = realtimeDB.ref(`rooms/${longRoomId}/currentGame/`);
-    // CHECKEAR ESTO DESDE OTRO NAVEGADOR
-    // Para testear ambos online
+
     return roomRef.on("value", (SnapShot) => {
       const playerData = SnapShot.val();
       const p1ON = playerData.player1.online;
@@ -175,7 +167,6 @@ const state = {
 
       console.log(playerData);
 
-      // setea el valor de la rtdb en el state
       const currentState = this.getState();
       currentState.online1 = p1ON;
       currentState.online2 = p2ON;
@@ -319,12 +310,6 @@ const state = {
     currentState.score2 = score.score2;
     this.setState(currentState); 
   },
-
-
-
-  // Usar tambien roomRef.off('child_changed... ?
-  notReadyToPlay() {},
-
 
   // CREAR FUNCION QUE ACTUE CON EL BOTON LOGOUT
   // QUE BORRE o CAMBIE TODA LA INFO DEL PLAYER en cuestion
