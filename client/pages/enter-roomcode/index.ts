@@ -126,7 +126,7 @@ class GoRoom extends HTMLElement {
 
     <div class="form-container">
       <form action="" class="form-room">
-         <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="20" maxlength="39">
+         <input required autofocus type="text" class="input-code" placeholder="INGRESAR ROOMCODE ACA" minlength="4" maxlength="10">
          <button class="send-code-btn" type="submit">INGRESAR A ROOM</button>
       </form>
     </div>
@@ -175,7 +175,7 @@ class GoRoom extends HTMLElement {
 
       const roomData = {
         tagname2: inputTagnameVal,
-        rtdbLongId: inputCodeVal,
+        roomId: inputCodeVal,
       };
 
       // usar getIntoARoom(roomCode)
@@ -192,11 +192,18 @@ class GoRoom extends HTMLElement {
         if (res.message) {
           return alert(res.message);
         }
+
+        state.setRoomId(res.roomId);
         state.setTagnameTwo(res.tagname2);
-        state.setActualRoomId(res.nanoCode);
-        state.setIdToShare(roomData.rtdbLongId);
+        state.setLongId(res.rtdblongId);
         state.hearOnline();
         Router.go("/game-rules");
+
+        // getIntoARoom devuelve:
+        // tagname2: tagname2,
+        // roomId: roomId,
+        // rtdblongId: rtdbRoomId
+
 
         // Mecanismo del state que trabaja con la rtdb
         // seteando los valores del user2

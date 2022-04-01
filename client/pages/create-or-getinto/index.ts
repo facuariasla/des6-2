@@ -202,8 +202,10 @@ class CreateOrNot extends HTMLElement {
         } 
         state.setRoomId(res.id)
         state.setUserId(res.userId)
-        state.setIdToShare(res.rtdbLongId)
+        state.setLongId(res.rtdbLongId)
         state.setOnlineValP1(true)
+
+
         // sessionStorage.setItem('rps.roomCode', res.id)
         Router.go('/new-game');
       })

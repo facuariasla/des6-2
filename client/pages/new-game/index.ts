@@ -116,7 +116,7 @@ class NewGame extends HTMLElement {
   
     <div class="codeval-container">
       <p class="code-title">Compartí el código:</p>
-      <p class="code-value-big">${roomLongId}</p>
+      <p class="code-value-big">${roomIdVal}</p>
       <p class="code-title">Con tu contricante</p>
       <p class="waiting">Esperando que el contricante ponga el codigo...</p>
     </div>

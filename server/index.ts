@@ -145,7 +145,7 @@ app.post("/rooms", (req, res, next) => {
                   res.json({
                     id: roomId.toString(),
                     userId: searchRes.docs[0].id,
-                    rtdbLongId: roomIdNano,
+                    rtdbLongId: roomIdNano
                   });
                 });
             });
@@ -158,20 +158,25 @@ app.post("/rooms", (req, res, next) => {
 
 // Entrar como invitado
 app.post("/go-to-a-room", (req, res) => {
-  const { rtdbLongId } = req.body;
+  // const { rtdbLongId } = req.body;
+  const { roomId } = req.body;
   const { tagname2 } = req.body;
 
+  
   roomsColl
-    .where("rtdbRoomId", "==", rtdbLongId)
+    .doc(roomId)
     .get()
     .then((searchRes) => {
-      if (searchRes.empty) {
+      if (!searchRes.exists) {
         res.status(401).json({
           message: "El código de sala ingresado no es válido",
         });
       } else {
+        const roomDBData = searchRes.data();
+        const rtdbRoomId = roomDBData.rtdbRoomId;
+        console.log(rtdbRoomId);
         // Realtime databse
-        const roomRef = rtdb.ref("rooms/" + rtdbLongId + "/currentGame");
+        const roomRef = rtdb.ref("rooms/" + rtdbRoomId + "/currentGame");
         roomRef
           .update({
             player2: {
@@ -184,14 +189,14 @@ app.post("/go-to-a-room", (req, res) => {
           })
           .then(() => {
             roomsColl
-              .doc(searchRes.docs[0].id)
+              .doc(roomId)
               .get()
               .then((snap) => {
                 const roomDBData = snap.data();
                 roomDBData.score.player2.tagname = tagname2;
                 // De igual manera para cambiar el SCORE
                 roomsColl
-                  .doc(searchRes.docs[0].id)
+                  .doc(roomId)
                   .update(roomDBData)
                   .then((res) => {
                     console.log(
@@ -201,7 +206,8 @@ app.post("/go-to-a-room", (req, res) => {
               });
             res.status(201).json({
               tagname2: tagname2,
-              nanoCode: searchRes.docs[0].id,
+              roomId: roomId,
+              rtdblongId: rtdbRoomId
             });
           });
       }

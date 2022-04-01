@@ -1,8 +1,8 @@
 import { Router } from "@vaadin/router";
 import { realtimeDB } from "./rtdb";
 
-const API_BASE_URL = "https://des6-2.herokuapp.com";
-// const API_BASE_URL = "http://localhost:3050";
+// const API_BASE_URL = "https://des6-2.herokuapp.com";
+const API_BASE_URL = "http://localhost:3050";
 
 const state = {
   data: {
@@ -112,7 +112,7 @@ const state = {
   },
 
   // page /create-or ****************************************************
-  setIdToShare(rtdbLongId: string) {
+  setLongId(rtdbLongId: string) {
     const currentState = this.getState();
     currentState.rtdbLongId = rtdbLongId;
     this.setState(currentState);
@@ -139,11 +139,6 @@ const state = {
     this.setState(currentState);
   },
 
-  setActualRoomId(roomID: string) {
-    const currentState = this.getState();
-    currentState.roomId = roomID;
-    this.setState(currentState);
-  },
 
   setOnlineValP1(onlineVal: boolean) {
     const currentState = this.getState();
