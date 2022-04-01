@@ -1,8 +1,7 @@
-import { Router } from "@vaadin/router";
 import { realtimeDB } from "./rtdb";
 
-// const API_BASE_URL = "https://des6-2.herokuapp.com";
-const API_BASE_URL = "http://localhost:3050";
+const API_BASE_URL = "https://des6-2.herokuapp.com";
+// const API_BASE_URL = "http://localhost:3050";
 
 const state = {
   data: {
