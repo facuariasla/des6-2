@@ -1,7 +1,10 @@
 import { realtimeDB } from "./rtdb";
 
+// Link para que funcione en heroku
 const API_BASE_URL = "https://des6-2.herokuapp.com";
-// const API_BASE_URL = "http://localhost:3050";
+
+// Link para que funcione en local
+  // const API_BASE_URL = "http://localhost:3050";
 
 const state = {
   data: {

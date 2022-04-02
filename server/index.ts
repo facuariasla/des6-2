@@ -136,7 +136,7 @@ app.post("/rooms", (req, res, next) => {
                       score: 0,
                     },
                     player2: {
-                      tagname: "",
+                      tagname: null,
                       score: 0,
                     },
                   },
@@ -174,42 +174,50 @@ app.post("/go-to-a-room", (req, res) => {
       } else {
         const roomDBData = searchRes.data();
         const rtdbRoomId = roomDBData.rtdbRoomId;
-        console.log(rtdbRoomId);
-        // Realtime databse
-        const roomRef = rtdb.ref("rooms/" + rtdbRoomId + "/currentGame");
-        roomRef
-          .update({
-            player2: {
-              tagname: tagname2,
-              userId: "",
-              pick: "",
-              online: true,
-              ready: false,
-            },
-          })
-          .then(() => {
-            roomsColl
-              .doc(roomId)
-              .get()
-              .then((snap) => {
-                const roomDBData = snap.data();
-                roomDBData.score.player2.tagname = tagname2;
-                // De igual manera para cambiar el SCORE
-                roomsColl
-                  .doc(roomId)
-                  .update(roomDBData)
-                  .then((res) => {
-                    console.log(
-                      `Document updated at ${res.writeTime.toDate()}`
-                    );
-                  });
+        const tagnameInDB = roomDBData.score.player2.tagname;
+
+        if(tagnameInDB == null ){
+          console.log(rtdbRoomId);
+          // Realtime databse
+          const roomRef = rtdb.ref("rooms/" + rtdbRoomId + "/currentGame");
+          roomRef
+            .update({
+              player2: {
+                tagname: tagname2,
+                userId: "",
+                pick: "",
+                online: true,
+                ready: false,
+              },
+            })
+            .then(() => {
+              roomsColl
+                .doc(roomId)
+                .get()
+                .then((snap) => {
+                  const roomDBData = snap.data();
+                  roomDBData.score.player2.tagname = tagname2;
+                  // De igual manera para cambiar el SCORE
+                  roomsColl
+                    .doc(roomId)
+                    .update(roomDBData)
+                    .then((res) => {
+                      console.log(
+                        `Document updated at ${res.writeTime.toDate()}`
+                      );
+                    });
+                });
+              res.status(201).json({
+                tagname2: tagname2,
+                roomId: roomId,
+                rtdblongId: rtdbRoomId
               });
-            res.status(201).json({
-              tagname2: tagname2,
-              roomId: roomId,
-              rtdblongId: rtdbRoomId
             });
+        } else {
+          res.status(401).json({
+            message2: 'La sala ya esta llena'
           });
+        }
       }
     });
 });
