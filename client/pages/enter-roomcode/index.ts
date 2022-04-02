@@ -191,23 +191,25 @@ class GoRoom extends HTMLElement {
       getInto.then((res) => {
         if (res.message) {
           return alert(res.message);
+        } else if (res.message2) {
+          return alert(res.message2);
+        } else {
+          state.setRoomId(res.roomId);
+          state.setTagnameTwo(res.tagname2);
+          state.setLongId(res.rtdblongId);
+          state.hearOnline();
+          Router.go("/game-rules");
+  
+          // getIntoARoom devuelve:
+          // tagname2: tagname2,
+          // roomId: roomId,
+          // rtdblongId: rtdbRoomId
+  
+  
+          // Mecanismo del state que trabaja con la rtdb
+          // seteando los valores del user2
+          // rooms/longId/currentGame/user2
         }
-
-        state.setRoomId(res.roomId);
-        state.setTagnameTwo(res.tagname2);
-        state.setLongId(res.rtdblongId);
-        state.hearOnline();
-        Router.go("/game-rules");
-
-        // getIntoARoom devuelve:
-        // tagname2: tagname2,
-        // roomId: roomId,
-        // rtdblongId: rtdbRoomId
-
-
-        // Mecanismo del state que trabaja con la rtdb
-        // seteando los valores del user2
-        // rooms/longId/currentGame/user2
       });
 
       // Si la clave no coincide, el flujo se corta (usar return)
